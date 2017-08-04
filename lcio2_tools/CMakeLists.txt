@@ -42,6 +42,7 @@ if (${APPLE})
 endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -DDROP_CGAL ${CPP_STANDARD_FLAGS} -Wall -Wextra -Wpedantic -Wno-unused-variable -Wno-unused-parameter")
 
+find_package(LCIO REQUIRED)
 
 # Make sure we find the Find*.cmake functions distributed with this package
 #set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -103,9 +104,11 @@ include_directories(
   )
 
 
+add_executable(legacy2lcio2 src/legacy2lcio2.cc)
+target_link_libraries(legacy2lcio2 lcio2 lcio2Dict podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
 add_executable(lcio2-edm-read src/read.cc)
-target_link_libraries(lcio2-edm-read lcio2 lcio2Dict podio ${ROOT_LIBRARIES})
-install(TARGETS lcio2-edm-read #fccedm-write fccedm-read fccedm-simplewrite fccedm-simpleread
+target_link_libraries(lcio2-edm-read lcio2 lcio2Dict podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
+install(TARGETS lcio2-edm-read legacy2lcio2 #fccedm-write fccedm-read fccedm-simplewrite fccedm-simpleread
   #EXPORT fccedmTargets
   RUNTIME DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin)
 
