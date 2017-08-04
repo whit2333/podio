@@ -47,7 +47,9 @@ public:
 public:
 
 $getter_declarations
+  // relation_declarations
 $relation_declarations
+  // constextracode_declarations
 $constextracode_declarations
   /// check whether the object is actually available
   bool isAvailable() const;

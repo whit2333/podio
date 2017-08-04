@@ -119,7 +119,7 @@ target_link_libraries(lcio2 podio)
 
 REFLEX_GENERATE_DICTIONARY(lcio2 ${headers} SELECTION ${CMAKE_BINARY_DIR}/src/selection.xml )
 add_library(lcio2Dict SHARED lcio2.cxx)
-add_dependencies(lcio2Dict datamodel-dictgen)
+add_dependencies(lcio2Dict lcio2-dictgen)
 target_link_libraries(lcio2Dict lcio2 podio ${ROOT_LIBRARIES})
 
 set_target_properties(lcio2 PROPERTIES

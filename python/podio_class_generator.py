@@ -113,6 +113,8 @@ class ClassGenerator(object):
         for member in members:
             klass = member["type"]
             namespace, rawclassname, namespace_open, namespace_close = self.demangle_classname(klass)
+            if klass.startswith("std::array"):
+              rawclassname = "std::" + rawclassname
             name = member["name"]
             description = member["description"]
             datatype_dict["members"].append("  %s %s;  ///<%s"
@@ -273,7 +275,7 @@ class ClassGenerator(object):
         gname,sname = name,name
         mnamespace2 = ""
         klassname2 = klass
-        if "::" in klass:
+        if "::" in klass and not klass.startswith("std::array"):
           mnamespace2, klassname2 = klass.split("::")
 
         if( self.getSyntax ):
@@ -283,16 +285,20 @@ class ClassGenerator(object):
           raise Exception("'%s' clashes with another member name in class '%s', previously defined in %s" % (name, classname, all_members[name]))
         all_members[name] = classname
 
-        getter_declarations += declarations["member_getter"].format(type=klassname2, name=name,fname=gname, description=desc)
+        getter_declarations    += declarations["member_getter"].format(type=klassname2, name=name,fname=gname, description=desc)
         getter_implementations += implementations["member_getter"].format(type=klass, classname=rawclassname, name=name, fname=gname)
+
         if klass in self.buildin_types:
-          setter_declarations += declarations["member_builtin_setter"].format(type=klass, name=name, fname=sname, description=desc)
+          setter_declarations    += declarations["member_builtin_setter"].format(type=klass, name=name, fname=sname, description=desc)
           setter_implementations += implementations["member_builtin_setter"].format(type=klass, classname=rawclassname, name=name, fname=sname)
           ostream_implementation += ( '  o << " %s : " << value.%s() << std::endl ;\n' % (name,gname) ) 
+
         elif klass.startswith("std::array"):
           setter_declarations += declarations["member_builtin_setter"].format(type=klass, name=name, fname=sname, description=desc)
           setter_implementations += implementations["member_builtin_setter"].format(type=klass, classname=rawclassname, name=name, fname=sname)
           item_class = klass.split("<")[1].split(",")[0].strip()
+          #print item_class
+          item_ns, item_rawclassname, item_namespace_open, item_namespace_close = self.demangle_classname(item_class)
           setter_declarations += declarations["array_builtin_setter"].format(type=item_class, name=name, fname=sname, description=desc)
           setter_implementations += implementations["array_builtin_setter"].format(type=item_class, classname=rawclassname, name=name, fname=sname)
           getter_declarations += declarations["array_member_getter"].format(type=item_class, name=name, fname=sname, description=desc)
@@ -335,12 +341,13 @@ class ClassGenerator(object):
         ConstGetter_implementations += implementations["const_member_getter"].format(type=klass, classname=rawclassname, name=name, fname=gname, description=desc)
 
         #print rawclassname
-        if "::" in klass:
+        if "::" in klass and not klass.startswith("std::array"):
+        #  rawclassname = "std::" + rawclassname
           nameA, nameB = klass.split("::")
         else:
           nameB = klass
 
-
+        #print  "nameB " + nameB
         # set up signature
         constructor_signature += "%s %s," %(nameB, name)
         # constructor
@@ -388,6 +395,7 @@ class ClassGenerator(object):
         
 
       # handle constructor from values
+      print constructor_signature
       constructor_signature = constructor_signature.rstrip(",")
       if constructor_signature == "":
         constructor_implementation = ""
@@ -395,6 +403,8 @@ class ClassGenerator(object):
         ConstConstructor_declaration = ""
         ConstConstructor_implementation = ""
       else:
+        #if rawclassname.startswith("array"):
+        #  rawclassname = "std::" + rawclassname
         substitutions = { "name" : rawclassname,
                           "constructor" : constructor_body,
                           "signature" : constructor_signature
@@ -952,8 +962,8 @@ class ClassGenerator(object):
                         }
         if klass not in self.buildin_types:
           substitutions["type"] = "class %s" % rawclassname
-          print klass
-          print rawclassname
+          #print klass
+          #print rawclassname
         implementation += self.evaluate_template("CollectionReturnArray.cc.template", substitutions)
         declaration += "\ttemplate<size_t arraysize>\n\tconst std::array<%s,arraysize> %s() const;\n" %(rawclassname, name)
       return declaration, implementation

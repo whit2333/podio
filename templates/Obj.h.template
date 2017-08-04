@@ -11,11 +11,12 @@
 
 $includes
 
+$forward_declarations
+
 ${namespace_open}
 // forward declarations
 class ${name};
 class Const${name};
-$forward_declarations
 
 class ${name}Obj : public podio::ObjBase {
 public:
