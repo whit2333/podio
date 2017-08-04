@@ -46,6 +46,12 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/podioVersion.h
 #--- add CMake infrastructure --------------------------------------------------
 include(cmake/podioCreateConfig.cmake)
 
+#--- add podio script --------------------------------------------------
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/bin/podio.in
+  ${CMAKE_CURRENT_BINARY_DIR}/bin/podio )
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/bin/podio 
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+
 #--- add license files ---------------------------------------------------------
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
               ${CMAKE_CURRENT_SOURCE_DIR}/NOTICE
