@@ -1,0 +1,29 @@
+---
+components:
+# A component is a POD designed to be embedded in another POD,
+# see the Particle or Jet PODs.
+# Components cannot be stored in a collection
+
+  LorentzVector:
+    Mass : float
+    Pt : float
+    Eta : float
+    Phi : float
+
+
+datatypes :
+# Datatypes are components that can be stored in a Collection
+
+  EventInfo :
+    description : "Event Info Data"
+    author : "C. Bernet, B. Hegner"
+    members :
+     - int Number // Event number
+
+  Particle :
+    description : "Naive Particle Type, used for reconstructed and generated particles"
+    author : "C. Bernet, B. Hegner"
+    members :
+     - LorentzVector P4 // Four momentum.
+     - int ID // Particle type identification code
+     - int Status // Status code

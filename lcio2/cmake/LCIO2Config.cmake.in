@@ -11,9 +11,9 @@ get_filename_component(LCIO2_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 set(LCIO2_INCLUDE_DIRS "@CMAKE_INSTALL_PREFIX@/include")
  
 # Our library dependencies (contains definitions for IMPORTED targets)
-if(NOT TARGET foo AND NOT LCIO2_BINARY_DIR)
-  include("${LCIO2_CMAKE_DIR}/LCIO2Targets.cmake")
-endif()
+#if(NOT TARGET foo AND NOT LCIO2_BINARY_DIR)
+#  include("${LCIO2_CMAKE_DIR}/LCIO2Targets.cmake")
+#endif()
  
 # These are IMPORTED targets created by LCIO2Targets.cmake
 set(LCIO2_LIBRARIES lcio2)
