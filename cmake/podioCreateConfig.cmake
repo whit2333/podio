@@ -4,6 +4,9 @@ write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/podioConfigVersion.
                                  VERSION ${podio_VERSION}
                                  COMPATIBILITY SameMajorVersion )
 
+                               #install(FILES ${CMAKE_CURRENT_BINARY_DIR}/podioConfig.cmake
+                               #              ${CMAKE_CURRENT_BINARY_DIR}/podioConfigVersion.cmake
+                               #        DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/podioConfig.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/podioConfigVersion.cmake
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake )
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/podio )

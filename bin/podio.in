@@ -21,6 +21,6 @@ elif [[ "$unamestr" == 'Darwin' ]]; then
   export DYLD_LIBRARY_PATH=$PODIO/tests:$PODIO/lib:$PODIO/tests:$DYLD_LIBRARY_PATH
 fi
 #echo platform detected: $platform
-export PYTHONPATH=$PODIO/python:$PYTHONPATH
+export PYTHONPATH=$PODIO/python:$PODIO/lib/python2.7/site-packages/podio:$PYTHONPATH
 
 python python/podio_class_generator.py "$@"
