@@ -12,7 +12,6 @@
 $includes
 
 ${namespace_open}
-
 // forward declarations
 class ${name};
 class Const${name};

@@ -113,7 +113,7 @@ implementations["prep_writing_relations"] += "\t\t}} else {{\n"
 implementations["prep_writing_relations"] += "\t\t\tm_refCollections[{i}]->push_back({{-2,-2}});\n"
 implementations["prep_writing_relations"] += "\t\t}}\n\t}}\n"
 
-declarations["relation"] = "\tstd::vector<{namespace}::Const{type}>* m_rel_{name}; ///< Relation buffer for read / write\n"
-declarations["relation_collection"] = "\tstd::vector<std::vector<{namespace}::Const{type}>*> m_rel_{name}_tmp; ///< Relation buffer for internal book-keeping\n"
+declarations["relation"] = "\tstd::vector<Const{type}>* m_rel_{name}; ///< Relation buffer for read / write\n"
+declarations["relation_collection"] = "\tstd::vector<std::vector<Const{type}>*> m_rel_{name}_tmp; ///< Relation buffer for internal book-keeping\n"
 
 implementations["ctor_list_relation"] = ", m_rel_{name}(new std::vector<{namespace}::Const{type}>())"

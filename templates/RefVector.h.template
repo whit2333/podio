@@ -1,6 +1,6 @@
-  void ${add_relation}(${relationtype});
+  void ${add_relation}(${classname});
   unsigned int ${relation}_size() const;
-  ${relationtype} ${get_relation}(unsigned int) const;
-  std::vector<${relationtype}>::const_iterator ${relation}_begin() const;
-  std::vector<${relationtype}>::const_iterator ${relation}_end() const;
+  ${classname} ${get_relation}(unsigned int) const;
+  std::vector<${classname}>::const_iterator ${relation}_begin() const;
+  std::vector<${classname}>::const_iterator ${relation}_end() const;
 

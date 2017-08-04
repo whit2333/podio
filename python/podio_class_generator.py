@@ -112,10 +112,11 @@ class ClassGenerator(object):
         members = definition["Members"]
         for member in members:
             klass = member["type"]
+            namespace, rawclassname, namespace_open, namespace_close = self.demangle_classname(klass)
             name = member["name"]
             description = member["description"]
             datatype_dict["members"].append("  %s %s;  ///<%s"
-                                            % (klass, name, description))
+                                            % (rawclassname, name, description))
             if "std::string" == klass:
                 datatype_dict["includes"].append("#include <string>")
                 self.warnings.append("%s defines a string member %s, that spoils the PODness"
@@ -270,6 +271,11 @@ class ClassGenerator(object):
         klass = member["type"]
         desc = member["description"]
         gname,sname = name,name
+        mnamespace2 = ""
+        klassname2 = klass
+        if "::" in klass:
+          mnamespace2, klassname2 = klass.split("::")
+
         if( self.getSyntax ):
           gname = "get" + name[:1].upper() + name[1:]
           sname = "set" + name[:1].upper() + name[1:]
@@ -277,7 +283,7 @@ class ClassGenerator(object):
           raise Exception("'%s' clashes with another member name in class '%s', previously defined in %s" % (name, classname, all_members[name]))
         all_members[name] = classname
 
-        getter_declarations += declarations["member_getter"].format(type=klass, name=name,fname=gname, description=desc)
+        getter_declarations += declarations["member_getter"].format(type=klassname2, name=name,fname=gname, description=desc)
         getter_implementations += implementations["member_getter"].format(type=klass, classname=rawclassname, name=name, fname=gname)
         if klass in self.buildin_types:
           setter_declarations += declarations["member_builtin_setter"].format(type=klass, name=name, fname=sname, description=desc)
@@ -294,9 +300,9 @@ class ClassGenerator(object):
           ConstGetter_implementations += implementations["const_array_member_getter"].format(type=item_class, classname=rawclassname, name=name, fname=sname, description=desc)
         else:
           ostream_implementation += ( '  o << " %s : " << value.%s() << std::endl ;\n' % (name,gname) )
-          setter_declarations += declarations["member_class_refsetter"].format(type=klass, name=name, description=desc)
+          setter_declarations += declarations["member_class_refsetter"].format(type=klassname2, name=name, description=desc)
           setter_implementations += implementations["member_class_refsetter"].format(type=klass, classname=rawclassname, name=name, fname=sname)
-          setter_declarations += declarations["member_class_setter"].format(type=klass, name=name, fname=sname, description=desc)
+          setter_declarations += declarations["member_class_setter"].format(type=klassname2, name=name, fname=sname, description=desc)
           setter_implementations += implementations["member_class_setter"].format(type=klass, classname=rawclassname, name=name, fname=sname)
           if self.expose_pod_members:
             sub_members = self.component_members[klass]
@@ -328,9 +334,15 @@ class ClassGenerator(object):
         # Getter for the Const variety of this datatype
         ConstGetter_implementations += implementations["const_member_getter"].format(type=klass, classname=rawclassname, name=name, fname=gname, description=desc)
 
+        #print rawclassname
+        if "::" in klass:
+          nameA, nameB = klass.split("::")
+        else:
+          nameB = klass
+
 
         # set up signature
-        constructor_signature += "%s %s," %(klass, name)
+        constructor_signature += "%s %s," %(nameB, name)
         # constructor
         constructor_body += "  m_obj->data.%s = %s;" %(name, name)
 
@@ -773,7 +785,7 @@ class ClassGenerator(object):
       #fg: sort the dictionary, so at least we get a predictable order (alphabetical) of the members
       keys = sorted( components.keys() )
 
-      ostreamComponents +=  "inline std::ostream& operator<<( std::ostream& o,const " + classname + "& value ){ \n"
+      ostreamComponents +=  "inline std::ostream& operator<<( std::ostream& o,const " + rawclassname + "& value ){ \n"
 
       for name in keys:
 #        print  " comp: " , classname , " name : " , name 
@@ -931,14 +943,19 @@ class ClassGenerator(object):
       for member in members:
         name = member["name"]
         klass = member["type"]
+        namespace, rawclassname, namespace_open, namespace_close = self.demangle_classname(klass)
+        if klass.startswith("std::array"):
+          rawclassname = "std::" + rawclassname
         substitutions = { "classname" : classname,
                         "member"    : name,
-                        "type"      : klass
+                        "type"      : rawclassname
                         }
         if klass not in self.buildin_types:
-          substitutions["type"] = "class %s" % klass
+          substitutions["type"] = "class %s" % rawclassname
+          print klass
+          print rawclassname
         implementation += self.evaluate_template("CollectionReturnArray.cc.template", substitutions)
-        declaration += "\ttemplate<size_t arraysize>\n\tconst std::array<%s,arraysize> %s() const;\n" %(klass, name)
+        declaration += "\ttemplate<size_t arraysize>\n\tconst std::array<%s,arraysize> %s() const;\n" %(rawclassname, name)
       return declaration, implementation
 
     def write_file(self, name,content):

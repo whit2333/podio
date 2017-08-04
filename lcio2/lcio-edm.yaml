@@ -17,13 +17,36 @@ components :
       SimpleStruct() : x(0),y(0),z(0) {}
       SimpleStruct( const int* v) : x(v[0]),y(v[1]),z(v[2]) {}
       "
+
+  lcio2::LorentzVector:
+    Mass : float
+    Pt : float
+    Eta : float
+    Phi : float
+
+
+datatypes :
+# Datatypes are components that can be stored in a Collection
+
+  lcio2::EventInfo :
+    Description : "Event Info Data"
+    Author : "C. Bernet, B. Hegner"
+    Members :
+     - int Number // Event number
+
+  lcio2::Particle :
+    Description : "Naive Particle Type, used for reconstructed and generated particles"
+    Author : "C. Bernet, B. Hegner"
+    Members :
+     - lcio2::LorentzVector P4 // Four momentum.
+     - int ID // Particle type identification code
+     - int Status // Status code
+
+
 # LCIO test Description
 #  Changes w.r.t. to original:
 #    o no collection specific information implemented for now
 #    o no string member in Vertex
-
-datatypes :
-
   lcio2::RawCalorimeterHit:
     Description: "LCIO raw calorimeter hit"
     Author : "F.Gaede, B. Hegner"
