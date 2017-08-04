@@ -8,10 +8,14 @@
 # Compute paths
 get_filename_component(podio_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
-get_filename_component(podio_INCLUDE_DIRS "${podio_CMAKE_DIR}/../include" ABSOLUTE)
-get_filename_component(podio_BINARY_DIR "${podio_CMAKE_DIR}/../bin" ABSOLUTE)
-get_filename_component(podio_LIBRARY_DIR "${podio_CMAKE_DIR}/../lib" ABSOLUTE)
+message("podio_CMAKE_DIR ${podio_CMAKE_DIR}")
+get_filename_component(podio_INCLUDE_DIRS "${podio_CMAKE_DIR}/../../include" ABSOLUTE)
+get_filename_component(podio_BINARY_DIR "${podio_CMAKE_DIR}/../../bin" ABSOLUTE)
+get_filename_component(podio_LIBRARY_DIR "${podio_CMAKE_DIR}/../../lib" ABSOLUTE)
 
+message("podio_INCLUDE_DIRS ${podio_INCLUDE_DIRS}")
+message("podio_BINARY_DIR ${podio_BINARY_DIR}")
+message("podio_LIBRARY_DIR ${podio_LIBRARY_DIR}")
 
 FIND_LIBRARY( podio_LIBRARIES NAMES podio PATHS
              ${podio_LIBRARY_DIR}

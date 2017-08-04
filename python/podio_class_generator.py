@@ -29,7 +29,7 @@ class ClassGenerator(object):
         self.yamlfile = yamlfile
         self.install_dir = install_dir
         self.package_name = package_name
-        self.template_dir = os.path.join(thisdir, "../templates")
+        self.template_dir = os.path.join(thisdir, "../../../../share/podio/templates")
         self.verbose = verbose
         self.buildin_types = ClassDefinitionValidator.buildin_types
         self.created_classes = []
