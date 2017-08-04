@@ -53,13 +53,13 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/bin/podio
   DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 #--- add license files ---------------------------------------------------------
-install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
-              ${CMAKE_CURRENT_SOURCE_DIR}/NOTICE
-        DESTINATION ${CMAKE_INSTALL_PREFIX})
+#install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
+#              ${CMAKE_CURRENT_SOURCE_DIR}/NOTICE
+#        DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 #--- install templates ---------------------------------------------------------
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/templates
-		DESTINATION ${CMAKE_INSTALL_PREFIX})
+		DESTINATION ${CMAKE_INSTALL_PREFIX}/share/podio)
 
 #--- project specific subdirectories -------------------------------------------
 add_subdirectory(python)
