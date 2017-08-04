@@ -1,10 +1,9 @@
 ---
-
 options :
   # should getters / setters be prefixed with get / set?
   getSyntax: False
   # should POD members be exposed with getters/setters in classes that have them as members?
-  exposePODMembers: False
+  exposePODMembers: True
 
 components :
   SimpleStruct:
@@ -25,8 +24,7 @@ components :
 
 datatypes :
 
-  # LCIO RawCalorimeterHit
-  RawCalorimeterHit:
+  lcio2::RawCalorimeterHit:
     Description: "LCIO raw calorimeter hit"
     Author : "F.Gaede, B. Hegner"
     Members:
@@ -35,8 +33,7 @@ datatypes :
       - int amplitude // The amplitude of the hit in ADC counts.
       - int timeStamp // The time stamp for the hit.
 
-  # LCIO CalorimeterHit
-  CalorimeterHit:
+  lcio2::CalorimeterHit:
     Description: "LCIO calorimeter hit"
     Author : "F.Gaede, B. Hegner"
     Members:
@@ -47,14 +44,14 @@ datatypes :
       - std::array<float, 3> position // The position of the hit in world coordinates.
       - int type // The type of the hit
     OneToOneRelations:
-      - RawCalorimeterHit rawHit // The RawCalorimeterHit
+      - lcio2::RawCalorimeterHit rawHit // The RawCalorimeterHit
 
   # LCIO cluster
   #   Changes w.r.t. to original:
   #     o std::bitset< 32 > _type not yet mapped
   #     o ParticleIDs are not implemented
   #     o cluster weight not properly implemented
-  Cluster:
+  lcio2::Cluster:
     Description: "LCIO cluster"
     Author : "F.Gaede, B. Hegner"
     Members:
@@ -68,13 +65,13 @@ datatypes :
         #      - std::vector<float> weight // weight of a particular cluster
         #      - std::vector<float> subdetectorEnergies // A vector that holds the energy observed in a particular subdetector.
     OneToManyRelations:
-      - Cluster clusters // The clusters that have been combined to this cluster.
-      - CalorimeterHit hits // The hits that have been combined to this cluster.
+      - lcio2::Cluster clusters // The clusters that have been combined to this cluster.
+      - lcio2::CalorimeterHit hits // The hits that have been combined to this cluster.
 
   # LCIO MCParticle
   #   Changes w.r.t. to original:
   #     o std::bitset< 32 > 	_simstatus not yet implemented
-  MCParticle:
+  lcio2::MCParticle:
     Description: "LCIO MC Particle"
     Author : "F.Gaede, B. Hegner"
     Members:
@@ -88,11 +85,11 @@ datatypes :
       - bool endpointSet  // Whether the endpoint has been set
       - std::array<float, 3> momentum // The particle's 3-momentum at the production vertex in [GeV]
     OneToManyRelations:
-      - MCParticle parents // The parents of this particle.
-      - MCParticle daughters // The daughters this particle.
+      - lcio2::MCParticle parents // The parents of this particle.
+      - lcio2::MCParticle daughters // The daughters this particle.
 
   # LCIO ReconstructedParticle
-  ReconstructedParticle:
+  lcio2::ReconstructedParticle:
     Description: "LCIO Reconstructed Particle"
     Author : "F.Gaede, B. Hegner"
     Members:
@@ -102,11 +99,11 @@ datatypes :
       - float charge // The particle's charge
       - float mass   // The mass of the particle in [GeV]
     OneToOneRelations:
-      - Vertex vertex // The start vertex associated to this particle.
+      - lcio2::Vertex vertex // The start vertex associated to this particle.
     OneToManyRelations:
-      - Cluster clusters // The clusters combined to this particle.
-      - Track tracks // The tracks combined to this particle"
-      - ReconstructedParticle particles // The particles combined to this particle
+      - lcio2::Cluster clusters // The clusters combined to this particle.
+      - lcio2::Track tracks // The tracks combined to this particle"
+      - lcio2::ReconstructedParticle particles // The particles combined to this particle
 
 #EVENT::FloatVec 	_cov
 #float 	_reference [3]
@@ -117,7 +114,7 @@ datatypes :
   # LCIO SimCalorimeterHit
   #   Changes w.r.t. to original:
   #     o MCParticleContribution has to become its own collection
-  SimCalorimeterHit:
+  lcio2::SimCalorimeterHit:
     Description: "LCIO simulated calorimeter hit"
     Author : "F.Gaede, B. Hegner"
     Members:
@@ -128,7 +125,7 @@ datatypes :
       - std::array<float, 3> position // The position of the hit in world coordinates.
 
   # LCIO SimTrackerHit
-  SimTrackerHit:
+  lcio2::SimTrackerHit:
     Description: "LCIO simulated tracker hit"
     Author : "F.Gaede, B. Hegner"
     Members:
@@ -140,12 +137,12 @@ datatypes :
       - float EDep   // EDep
       - std::array<float, 3> _p // position?
     OneToOneRelations:
-      - MCParticle particle // The MCParticle that caused the hit.
+      - lcio2::MCParticle particle // The MCParticle that caused the hit.
 
 
   # LCIO Track
   #     o not yet implemented std::bitset< 32 > 	_type
-  Track:
+  lcio2::Track:
     Description: "LCIO reconstructed track"
     Author : "F.Gaede, B. Hegner"
     Members:
@@ -156,12 +153,12 @@ datatypes :
       - float radiusOfInnermostHit // The radius of the innermost hit that has been used in the track fit.
         #      - std::vector<int> subdetectorHitNumbers // The number of hits in particular subdetectors
     OneToManyRelations:
-      - Track tracks    // The tracks that have been combined to this track.
-      - TrackerHit hits // The hits that have been combined to this track.
-      - TrackState trackStates // Track states associated to this track.
+      - lcio2::Track tracks    // The tracks that have been combined to this track.
+      - lcio2::TrackerHit hits // The hits that have been combined to this track.
+      - lcio2::TrackState trackStates // Track states associated to this track.
 
   # LCIO TrackerData
-  TrackerData:
+  lcio2::TrackerData:
     Description : "LCIO tracker data"
     Author : "F.Gaede, B. Hegner"
     Members:
@@ -172,7 +169,7 @@ datatypes :
 
   # LCIO TrackerHit
   #   o no specialisation for the different kind of geometries
-  TrackerHit:
+  lcio2::TrackerHit:
     Description : "LCIO tracker hit"
     Author : "F.Gaede, B. Hegner"
     Members :
@@ -190,7 +187,7 @@ datatypes :
 #EVENT::LCObjectVec 	_rawHits
 
   # LCIO TrackerPulse
-  TrackerPulse:
+  lcio2::TrackerPulse:
     Description : "LCIO tracker pulse"
     Author : "F. Gaede, B. Hegner"
     Members:
@@ -201,10 +198,10 @@ datatypes :
       - float charge // The integrated charge of the pulse
         #      - std::vector<float> covMatrix    // ...
     OneToOneRelations:
-      - TrackerData corrData // ...
+      - lcio2::TrackerData corrData // ...
 
   # LCIO TrackerRawData
-  TrackerData:
+  lcio2::TrackerData:
     Description: "LCIO tracker raw data"
     Author : "F.Gaede, B. Hegner"
     Members:
@@ -214,7 +211,7 @@ datatypes :
         #      - std::vector<short> charge // The actual FADC spectrum.
 
   # LCIO TrackState
-  TrackState:
+  lcio2::TrackState:
       Description: "LCIO track state"
       Author : "F.Gaede, B. Hegner"
       Members:
@@ -228,7 +225,7 @@ datatypes :
           #        - std::vector<float> covMatrix // Covariance matrix of the track parameters.
 
   # LCIO Vertex
-  Vertex:
+  lcio2::Vertex:
       Description: "LCIO vertex"
       Author : "F.Gaede, B. Hegner"
       Members:
@@ -239,4 +236,4 @@ datatypes :
           #        - std::vector<float> cov // <empty>
           #        - std::vector<float> par // <empty>
       OneToOneRelations:
-        - ReconstructedParticle particle // Reconstructed Particle associated to the Vertex.
+        - lcio2::ReconstructedParticle particle // Reconstructed Particle associated to the Vertex.

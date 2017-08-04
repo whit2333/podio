@@ -103,6 +103,12 @@ include_directories(
   )
 
 
+add_executable(lcio2-edm-read src/read.cc)
+target_link_libraries(lcio2-edm-read lcio2 lcio2Dict podio ${ROOT_LIBRARIES})
+install(TARGETS lcio2-edm-read #fccedm-write fccedm-read fccedm-simplewrite fccedm-simpleread
+  #EXPORT fccedmTargets
+  RUNTIME DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin)
+
 # adding testing capabilities
 #include(CTest)
 
@@ -114,7 +120,6 @@ include_directories(
 #configure_file(${CMAKE_SOURCE_DIR}/cmake/Datamodel.cmake
 #  "${CMAKE_SOURCE_DIR}/datamodel/CMakeLists.txt" @ONLY)
 # Add sub-directories
-#add_subdirectory(datamodel)
 #add_subdirectory(utilities)
 #add_subdirectory(examples)
 #add_subdirectory(tests)

@@ -8,6 +8,7 @@ set(LCIO2_VERSION
   ${LCIO2_MAJOR_VERSION}.${LCIO2_MINOR_VERSION})
 
 execute_process(COMMAND podio ${CMAKE_SOURCE_DIR}/lcio-edm.yaml ${PROJECT_BINARY_DIR} lcio )
+execute_process(COMMAND podio ${CMAKE_SOURCE_DIR}/lcio2-edm-extensions.yaml ${PROJECT_BINARY_DIR} lcio )
 
 #--- Declare options -----------------------------------------------------------
 option(CREATE_DOC "Whether or not to create doxygen doc target.")

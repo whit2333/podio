@@ -4,7 +4,7 @@ components:
 # see the Particle or Jet PODs.
 # Components cannot be stored in a collection
 
-  LorentzVector:
+  lcio2::LorentzVector:
     Mass : float
     Pt : float
     Eta : float
@@ -14,16 +14,16 @@ components:
 datatypes :
 # Datatypes are components that can be stored in a Collection
 
-  EventInfo :
-    description : "Event Info Data"
-    author : "C. Bernet, B. Hegner"
-    members :
+  lcio2::EventInfo :
+    Description : "Event Info Data"
+    Author : "C. Bernet, B. Hegner"
+    Members :
      - int Number // Event number
 
-  Particle :
-    description : "Naive Particle Type, used for reconstructed and generated particles"
-    author : "C. Bernet, B. Hegner"
-    members :
-     - LorentzVector P4 // Four momentum.
+  lcio2::Particle :
+    Description : "Naive Particle Type, used for reconstructed and generated particles"
+    Author : "C. Bernet, B. Hegner"
+    Members :
+     - lcio2::LorentzVector P4 // Four momentum.
      - int ID // Particle type identification code
      - int Status // Status code

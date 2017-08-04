@@ -1,9 +1,9 @@
 // Data model
-#include "datamodel/EventInfo.h"
-#include "datamodel/EventInfoCollection.h"
-#include "datamodel/Particle.h"
-#include "datamodel/ParticleCollection.h"
-#include "datamodel/LorentzVector.h"
+#include "lcio2/EventInfo.h"
+#include "lcio2/EventInfoCollection.h"
+#include "lcio2/Particle.h"
+#include "lcio2/ParticleCollection.h"
+#include "lcio2/LorentzVector.h"
 
 // Utility functions
 #include "utilities/VectorUtils.h"
