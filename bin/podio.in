@@ -23,4 +23,4 @@ fi
 #echo platform detected: $platform
 export PYTHONPATH=$PODIO/python:$PODIO/lib/python2.7/site-packages/podio:$PYTHONPATH
 
-python python/podio_class_generator.py "$@"
+python $PODIO/lib/python2.7/site-packages/podio/podio_class_generator.py "$@"
