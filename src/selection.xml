@@ -1,12 +1,20 @@
 <lcgdict>
-    <selection>
-    <class name="podio::CollectionBase"/>
-    <class name="podio::CollectionIDTable">
-        <field name="m_mutex" transient="true"/>
+  <selection>
+
+    <class name="podio::ObjBase">
+      <field name="ref_counter" transient="true" />
     </class>
+
+    <class name="podio::CollectionBase" />
+
+    <class name="podio::CollectionIDTable">
+      <field name="m_mutex" transient="true" />
+    </class>
+
     <class name="podio::PythonEventStore">
     </class>
-    <class name="podio::ObjectID"/>
-    <class name="vector<podio::ObjectID>"/>
-    </selection>
+    <class name="podio::ObjectID" />
+    <class name="std::vector<podio::ObjectID>" />
+
+  </selection>
 </lcgdict>

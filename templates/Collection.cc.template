@@ -97,6 +97,10 @@ void ${name}Collection::setBuffer(void* address){
   m_data = static_cast<${name}DataContainer*>(address);
 }
 
+void ${name}Collection::makeBranch(TTree* t, std::string name, std::string collClassName){
+  t->Branch(name.c_str(),  "std::vector<${classname}Data>", &m_data);//, 32000, 199);
+}
+
 
 const ${name} ${name}CollectionIterator::operator* () const {
   m_object.m_obj = (*m_collection)[m_index];

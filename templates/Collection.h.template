@@ -112,8 +112,14 @@ public:
     return const_iterator(m_entries.size(), &m_entries);
   }
 
+  void makeBranch(TTree* t, std::string name, std::string collClassName);
+      //m_datatree->Branch(name.c_str(),  collClassName.c_str(), coll->getBufferAddress(), 32000, 199);
+
   /// returns the address of the pointer to the data buffer
   void* getBufferAddress() { return (void*)&m_data;};
+
+  /// returns the address of the pointer to the data buffer
+  ${name}DataContainer** getBufferAddress2() { return &m_data;};
 
   /// returns the pointer to the data buffer
   std::vector<${name}Data>* _getBuffer() { return m_data;};

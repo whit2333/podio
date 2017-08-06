@@ -90,12 +90,11 @@ class ClassGenerator(object):
         content = ""
         for klass in self.created_classes:
             # if not klass.endswith("Collection") or klass.endswith("Data"):
-            content += '          <class name="std::vector<%s>" />\n' % klass
-            content += """
-            <class name="%s">
-              <field name="m_registry" transient="true"/>
-              <field name="m_container" transient="true"/>
-            </class>\n""" % klass
+            content += '    <class name="std::vector<%s>" />\n' % klass
+            content += """    <class name="%s">
+      <field name="m_registry" transient="true" />
+      <field name="m_container" transient="true" />
+    </class>\n\n""" % klass
 
         templatefile = os.path.join(self.template_dir,
                                     "selection.xml.template")
@@ -672,6 +671,7 @@ class ClassGenerator(object):
       ostream_implementation += "}\n  return o ;\n}\n"
 
       substitutions = { "name" : rawclassname,
+                        "classname" : classname,
                         "constructorbody" : constructorbody,
                         "destructorbody"  : destructorbody,
                         "prepareforwritinghead" : prepareforwritinghead,

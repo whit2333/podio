@@ -5,6 +5,8 @@
 #include <utility>
 #include <vector>
 
+#include "TTree.h"
+
 #include "podio/ObjectID.h"
 
 namespace podio {
@@ -16,6 +18,16 @@ namespace podio {
   typedef std::vector<std::pair<std::string,podio::CollectionBase*>> CollRegistry;
   typedef std::vector<std::vector<podio::ObjectID>*> CollRefCollection;
 
+  template<class T>
+  class UnderlyingTypeStuff {
+  public:
+    typedef T object_type;
+    T* getBufferAddress2(){
+      return static_cast<T*>(this->getBufferAddress());
+    }
+  };
+
+
   //class CollectionBuffer {
   //public:
   //  void* data;
@@ -24,6 +36,10 @@ namespace podio {
 
   class CollectionBase {
   public:
+
+    virtual void makeBranch(TTree* t, std::string name, std::string collClassName) = 0;
+      //m_datatree->Branch(name.c_str(),  collClassName.c_str(), coll->getBufferAddress(), 32000, 199);
+
     /// prepare buffers for serialization
     virtual void  prepareForWrite() = 0;
 

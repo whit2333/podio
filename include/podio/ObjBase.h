@@ -38,7 +38,7 @@ namespace podio {
 
   private:
     /// reference counter
-    std::atomic<int> ref_counter;
+    std::atomic<int> ref_counter; //!
 
   };
 

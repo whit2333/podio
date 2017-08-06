@@ -2,6 +2,7 @@
 // ROOT specifc includes
 #include "TFile.h"
 #include "TTree.h"
+#include <typeinfo>
 
 // podio specific includes
 #include "podio/CollectionBase.h"
@@ -52,27 +53,33 @@ namespace podio {
       size_t pos1 = className.find_first_not_of("0123456789", pos);
       className.erase(0, pos1);
     }
+    std::cout << className << std::endl;
     // replace any numbers between namespace and class with "::"
     pos = className.find_first_of("0123456789");
     if (pos != std::string::npos) {
       size_t pos1 = className.find_first_not_of("0123456789", pos);
       className.replace(pos, pos1-pos, "::");
     }
+    std::cout << " asdf " << className << std::endl;
     // transform XCollection into vector<XData>
     pos = className.find("Collection");
     className.erase(pos,pos+10);
-    std::string collClassName = "vector<"+className+"Data>";
+    std::string collClassName = "std::vector<"+className+"Data>";
 
     if(coll==nullptr) {
       std::cerr<<"no such collection to write, throw exception."<<std::endl;
     }
     else {
-      m_datatree->Branch(name.c_str(),  collClassName.c_str(), coll->getBufferAddress(),199);
+      std::cout << " NAME " << collClassName.c_str()  << std::endl;
+      //std::cout << typeid(coll->getBufferAddress()).name() << std::endl;
+      //std::cout << typeid(coll).name() << std::endl;
+      //m_datatree->Branch(name.c_str(),  collClassName.c_str(), coll->getBufferAddress(), 32000, 199);
+      coll->makeBranch(m_datatree, name, collClassName);
       auto colls = coll->referenceCollections();
       if (colls != nullptr){
       int i = 0;
       for(auto& c : (*colls)){
-        m_datatree->Branch((name+"#"+std::to_string(i)).c_str(),c,199);
+        m_datatree->Branch((name+"#"+std::to_string(i)).c_str(),c,99);
         ++i;
       }
     }

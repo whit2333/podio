@@ -64,4 +64,4 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/templates
 #--- project specific subdirectories -------------------------------------------
 add_subdirectory(python)
 add_subdirectory(src)
-add_subdirectory(tests)
+#add_subdirectory(tests)
