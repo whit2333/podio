@@ -67,12 +67,12 @@ namespace podio {
       std::cerr<<"no such collection to write, throw exception."<<std::endl;
     }
     else {
-      m_datatree->Branch(name.c_str(),  collClassName.c_str(), coll->getBufferAddress());
+      m_datatree->Branch(name.c_str(),  collClassName.c_str(), coll->getBufferAddress(),199);
       auto colls = coll->referenceCollections();
       if (colls != nullptr){
       int i = 0;
       for(auto& c : (*colls)){
-        m_datatree->Branch((name+"#"+std::to_string(i)).c_str(),c);
+        m_datatree->Branch((name+"#"+std::to_string(i)).c_str(),c,199);
         ++i;
       }
     }

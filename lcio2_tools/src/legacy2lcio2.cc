@@ -1,6 +1,7 @@
 #include "lcio2/EventInfoCollection.h"
 #include "lcio2/MCParticleCollection.h"
 #include "lcio2/MCParticle.h"
+#include "lcio2utils.h"
 
 #include "lcio.h"
 #include <stdio.h>
@@ -39,7 +40,6 @@
 //#include "IMPL/LCFlagImpl.h"
 #include "UTIL/BitSet32.h"
 #include "LCIOSTLTypes.h"
-
 
 #include "IO/LCReader.h"
 #include "IMPL/LCTOOLS.h"
@@ -137,32 +137,21 @@ void writeEventTree(podio::EventStore& store,
         int n_elem = a_collection->getNumberOfElements();
         for(int i_elem = 0; i_elem<n_elem; i_elem++) {
 
-          auto part =  dynamic_cast<MCParticle*>( a_collection->getElementAt( i_elem ) ) ;
-          auto a_mcp = lcio2::MCParticle();
-          a_mcp.momentum({part->getMomentum()[0] ,  part->getMomentum()[1] ,   part->getMomentum()[2] });
-          a_mcp.vertex({part->getVertex()[0] ,  part->getVertex()[1] ,   part->getVertex()[2] });
-          a_mcp.pdg( part->getPDG() );
-          a_mcp.genstatus( part->getGeneratorStatus() );
-          a_mcp.mass( part->getMass() );
-          a_mcp.charge( part->getCharge() );
-          a_mcp.time( part->getTime() );
-          a_mcp.endpoint({part->getEndpoint()[0] ,  part->getEndpoint()[1] ,   part->getEndpoint()[2] });
-          mcps.push_back(a_mcp);
+          auto part  = dynamic_cast<MCParticle*>( a_collection->getElementAt( i_elem ) ) ;
+          auto a_mcp = lcio2::to_lcio2(part);
+          
+          //auto a_mcp = lcio2::MCParticle();
+          //a_mcp.momentum({part->getMomentum()[0] ,  part->getMomentum()[1] ,   part->getMomentum()[2] });
+          //a_mcp.vertex({part->getVertex()[0] ,  part->getVertex()[1] ,   part->getVertex()[2] });
+          //a_mcp.pdg( part->getPDG() );
+          //a_mcp.genstatus( part->getGeneratorStatus() );
+          //a_mcp.mass( part->getMass() );
+          //a_mcp.charge( part->getCharge() );
+          //a_mcp.time( part->getTime() );
+          //a_mcp.endpoint({part->getEndpoint()[0] ,  part->getEndpoint()[1] ,   part->getEndpoint()[2] });
+          //mcps.push_back(a_mcp);
+          
           std::cout << a_mcp << std::endl;
-
-          //printf("[%8.8d]", part->id() );
-          //printf("%5d|"   , i_elem );
-          //printf("%10d|" , part->getPDG() );
-          //printf("% 1.2e,% 1.2e,% 1.2e|" , 
-          //       part->getMomentum()[0] ,
-          //       part->getMomentum()[1] , 
-          //       part->getMomentum()[2] );
-          //printf("% 1.2e,% 1.2e,% 1.2e|" , 
-          //       part->getMomentumAtEndpoint()[0] ,
-          //       part->getMomentumAtEndpoint()[1] , 
-          //       part->getMomentumAtEndpoint()[2] );
-          //printf("% 1.2e \n" , part->getEnergy() ) ; 
-        
         }
       }
     }

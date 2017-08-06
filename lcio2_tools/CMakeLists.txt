@@ -97,98 +97,61 @@ message(
 # set up include-directories
 include_directories(
   "${PROJECT_SOURCE_DIR}"
+  "${PROJECT_SOURCE_DIR}/include"
   "${PROJECT_BINARY_DIR}"
   "${PROJECT_BINARY_DIR}/lcio"
   "${ROOT_INCLUDE_DIRS}"
   "${podio_INCLUDE_DIRS}"
   )
 
+# --------------------------------------------------------------------------
+
+file(GLOB sources src/lcio2utils.cc )
+file(GLOB headers include/lcio2utils.h )
+
+add_library(lcio2util SHARED ${sources} ${headers})
+target_link_libraries(lcio2util lcio2 lcio2Dict podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
+set_target_properties(lcio2util PROPERTIES PUBLIC_HEADER "${headers}")
+
+#REFLEX_GENERATE_DICTIONARY(lcio2 ${headers} SELECTION ${CMAKE_BINARY_DIR}/src/selection.xml )
+#add_library(lcio2Dict SHARED lcio2.cxx)
+#add_dependencies(lcio2Dict lcio2-dictgen)
+#target_link_libraries(lcio2Dict lcio2 podio ${ROOT_LIBRARIES})
+#
+#set_target_properties(lcio2util PROPERTIES
+#  PUBLIC_HEADER "${headers}")
+
+install(TARGETS lcio2util
+  # IMPORTANT: Add the datamodel library to the "export-set"
+  #EXPORT fccedmTargets
+  #RUNTIME DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin
+  LIBRARY DESTINATION "${INSTALL_LIB_DIR}" COMPONENT shlib
+  PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}/lcio2"
+  COMPONENT dev)
+
+#install(FILES
+#  "${PROJECT_BINARY_DIR}/lcio2Dict.rootmap"
+#  DESTINATION "${INSTALL_LIB_DIR}" COMPONENT dev)
+
+#if (${ROOT_VERSION} GREATER 6)
+#  install(FILES
+#      "${PROJECT_BINARY_DIR}/lcio2_rdict.pcm"
+#      DESTINATION "${INSTALL_LIB_DIR}" COMPONENT dev)
+#endif()
+
+# --------------------------------------------------------------------------
 
 add_executable(legacy2lcio2 src/legacy2lcio2.cc)
-target_link_libraries(legacy2lcio2 lcio2 lcio2Dict podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
+target_link_libraries(legacy2lcio2 lcio2util lcio2 lcio2Dict podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
+add_dependencies(legacy2lcio2 lcio2util)
+
 add_executable(lcio2-edm-read src/read.cc)
-target_link_libraries(lcio2-edm-read lcio2 lcio2Dict podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
+target_link_libraries(lcio2-edm-read lcio2util lcio2 lcio2Dict podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
+add_dependencies(lcio2-edm-read lcio2util)
+
 install(TARGETS lcio2-edm-read legacy2lcio2 #fccedm-write fccedm-read fccedm-simplewrite fccedm-simpleread
   #EXPORT fccedmTargets
   RUNTIME DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin)
 
-# adding testing capabilities
-#include(CTest)
+# --------------------------------------------------------------------------
 
-#--- target for Doxygen documentation ------------------------------------------
-#jif(LCIO2TOOLS_documentation)
-#j  include(cmake/LCIO2TOOLSDoxygen.cmake)
-#jendif()
-
-#configure_file(${CMAKE_SOURCE_DIR}/cmake/Datamodel.cmake
-#  "${CMAKE_SOURCE_DIR}/datamodel/CMakeLists.txt" @ONLY)
-# Add sub-directories
-#add_subdirectory(utilities)
-#add_subdirectory(examples)
-#add_subdirectory(tests)
-
-#file(GLOB sources ${CMAKE_BINARY_DIR}/src/*.cc)
-#file(GLOB headers ${CMAKE_BINARY_DIR}/lcio/*.h podio/PythonEventStore.h)
-#
-#add_library(LCIO2TOOLS SHARED ${sources} ${headers})
-#target_link_libraries(LCIO2TOOLS podio)
-#
-#REFLEX_GENERATE_DICTIONARY(LCIO2TOOLS ${headers} SELECTION ${CMAKE_BINARY_DIR}/src/selection.xml )
-#add_library(LCIO2TOOLSDict SHARED LCIO2TOOLS.cxx)
-#add_dependencies(LCIO2TOOLSDict datamodel-dictgen)
-#target_link_libraries(LCIO2TOOLSDict LCIO2TOOLS podio ${ROOT_LIBRARIES})
-#
-#set_target_properties(LCIO2TOOLS PROPERTIES
-#  PUBLIC_HEADER "${headers}")
-#
-#install(TARGETS LCIO2TOOLS LCIO2TOOLSDict
-#  # IMPORTANT: Add the datamodel library to the "export-set"
-#  #EXPORT fccedmTargets
-#  RUNTIME DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin
-#  LIBRARY DESTINATION "${INSTALL_LIB_DIR}" COMPONENT shlib
-#  PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}/LCIO2TOOLS"
-#  COMPONENT dev)
-#
-#install(FILES
-#  "${PROJECT_BINARY_DIR}/LCIO2TOOLSDict.rootmap"
-#  DESTINATION "${INSTALL_LIB_DIR}" COMPONENT dev)
-#
-#if (${ROOT_VERSION} GREATER 6)
-#  install(FILES
-#      "${PROJECT_BINARY_DIR}/LCIO2TOOLS_rdict.pcm"
-#      DESTINATION "${INSTALL_LIB_DIR}" COMPONENT dev)
-#endif()
-#
-#
-### The interesting stuff goes here
-### ===============================
-##
-### Add all targets to the build-tree export set
-##export(TARGETS datamodel utilities LCIO2TOOLS-write LCIO2TOOLS-read LCIO2TOOLS-simplewrite
-##  FILE "${PROJECT_BINARY_DIR}/LCIO2TOOLSTargets.cmake")
-##
-### Export the package for use from the build-tree
-### (this registers the build-tree with a global CMake-registry)
-##export(PACKAGE LCIO2TOOLS)
-##
-### Create the LCIO2TOOLSConfig.cmake and LCIO2TOOLSConfigVersion files
-##file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}"
-##   "${INSTALL_INCLUDE_DIR}")
-### ... for the build tree
-##set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}")
-#
-#configure_file(cmake/LCIO2TOOLSConfig.cmake.in
-#  "${PROJECT_BINARY_DIR}/LCIO2TOOLSConfig.cmake" @ONLY)
-#
-#configure_file(cmake/LCIO2TOOLSConfigVersion.cmake.in
-#  "${PROJECT_BINARY_DIR}/LCIO2TOOLSConfigVersion.cmake" @ONLY)
-#
-## Install the LCIO2TOOLSConfig.cmake and LCIO2TOOLSConfigVersion.cmake
-#install(FILES
-#  "${PROJECT_BINARY_DIR}/LCIO2TOOLSConfig.cmake"
-#  "${PROJECT_BINARY_DIR}/LCIO2TOOLSConfigVersion.cmake"
-#  DESTINATION lib/LCIO2TOOLS)
-##
-### Install the export set for use with the install-tree
-##install(EXPORT LCIO2TOOLSTargets DESTINATION
-##  "${INSTALL_CMAKE_DIR}" COMPONENT dev)
