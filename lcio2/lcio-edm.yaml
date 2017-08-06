@@ -223,9 +223,19 @@ datatypes :
     OneToOneRelations:
       - lcio2::TrackerData corrData // ...
 
-  # LCIO TrackerRawData
-  lcio2::TrackerData:
+  lcio2::TrackerRawData:
     Description: "LCIO tracker raw data"
+    Author : "Whit Armstrong"
+    Members:
+      - int cellID0  // The detector specific (geometrical) cell id.
+      - int cellID1  // The second detector specific (geometrical) cell id.
+      - int channelID  // channel  id.
+      - int time     //  time measurement associated with the adc values.
+      - int adc      // measured ADC values
+        #      - std::vector<short> adc // measured ADC values.
+  
+  lcio2::TrackerData:
+    Description: "LCIO tracker data"
     Author : "F.Gaede, B. Hegner"
     Members:
       - int cellID0  // The detector specific (geometrical) cell id.

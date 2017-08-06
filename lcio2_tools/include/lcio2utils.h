@@ -7,6 +7,7 @@
 #include "EVENT/SimCalorimeterHit.h"
 #include "EVENT/RawCalorimeterHit.h"
 #include "EVENT/TrackerHit.h"
+#include "EVENT/TrackerRawData.h"
 #include "EVENT/SimTrackerHit.h"
 //#include "EVENT/RawTrackerHit.h"
 #include "EVENT/ReconstructedParticle.h"
@@ -23,6 +24,7 @@
 //#include "lcio2/RawTrackerHit.h"
 #include "lcio2/ReconstructedParticle.h"
 #include "lcio2/Vertex.h"
+#include "lcio2/TrackerRawData.h"
 
 
 namespace lcio2 {
@@ -135,6 +137,17 @@ lcio2::MCParticle to_lcio2(EVENT::MCParticle* mcp)
       t->getdEdxError(),
       t->getRadiusOfInnermostHit());
   }
+
+  TrackerRawData to_lcio2(EVENT::TrackerRawData* t)
+  {
+  TrackerRawData(
+      t->getCellID0(),
+      t->getCellID1(),
+      0,//t->getChannelID(), // channel not used legacy-LCIO?
+      t->getTime(),
+      0);// adc = 0 ///FIXME
+  }
+
 }
 
 #endif

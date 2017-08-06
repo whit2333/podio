@@ -5,8 +5,11 @@
 #include "lcio2/TrackerHitCollection.h"
 #include "lcio2/SimTrackerHitCollection.h"
 #include "lcio2/CalorimeterHitCollection.h"
+#include "lcio2/SimCalorimeterHitCollection.h"
 #include "lcio2/TrackCollection.h"
 #include "lcio2/ClusterCollection.h"
+#include "lcio2/ReconstructedParticleCollection.h"
+#include "lcio2/TrackerRawDataCollection.h"
 
 #include "lcio.h"
 #include <stdio.h>
@@ -78,20 +81,6 @@
 #include "podio/ROOTReader.h"
 #include "podio/ROOTWriter.h"
 
-//template<class T>
-//void setMomentum(T& p, double pt, double eta, double phi) {
-//    p.Px = TMath::Cos(phi)*pt;
-//    p.Py = TMath::Sin(phi)*pt;
-//    p.Pz = TMath::Sinh(eta)*pt;
-//}
-//// First get the collection (note that this will work differently in FCCSW, see below)
-//auto& myParticleColl = store.create<fcc::ParticleCollection>("recoParticles");
-//auto& myMCParticleCollection = store.create<fcc::MCParticleCollection>("genParticles");
-//auto particle = myParticleCollection.create();
-//auto mcParticle = myMCParticleCollection.create();
-//setKinematics(particle.Core, 20, 0.1, 0.5);
-//setKinematics(mcParticle.Core, 20, 0.1, 0.5);
-
 void writeEventTree(podio::EventStore& store,
                     bool verbose,
                     podio::ROOTWriter& writer,
@@ -99,21 +88,6 @@ void writeEventTree(podio::EventStore& store,
 {
 
   //--- create a ROOT file, a tree and a branch ...
-
-  //TFile* file = new TFile( "lcioEventTree.root" , "RECREATE");    
-  //TTree* tree = new TTree( "LCIO" , "lcio event data tree");
-  //std::string treeName("LCEvent") ;
-  IMPL::LCEventImpl* treeEvt=0 ;
-  //std::string type("IMPL::LCEventImpl") ;
-  //TBranch* mcpBranch = tree->Branch( treeName.c_str(), 
-  //      			     type.c_str(), 
-  //      			     (void*) &treeEvt, 
-  //      			     1024, // record size 
-  //      			     199    // split level 
-  //      			     );
-  //
-  //std::cout << " loaded LCIO library and dictionary ... " << std::endl ;
-
   int nEvents = 0  ;
   int maxEvt = 10000 ; 
   IO::LCReader* lcReader = IOIMPL::LCFactory::getInstance()->createLCReader() ;
@@ -165,6 +139,10 @@ void writeEventTree(podio::EventStore& store,
   auto& EM_ENDCAP = store.create<lcio2::CalorimeterHitCollection>("EM_ENDCAP");
   auto& HAD_BARREL = store.create<lcio2::CalorimeterHitCollection>("HAD_BARREL");
   auto& HAD_ENDCAP = store.create<lcio2::CalorimeterHitCollection>("HAD_ENDCAP");
+  auto& PandoraPFOCollection = store.create<lcio2::ReconstructedParticleCollection>("PandoraPFOCollection");
+  auto& BeamCalHits = store.create<lcio2::SimCalorimeterHitCollection>("BeamCalHits");
+  //auto& VXD_RawTrackerHits = store.create<lcio2::TrackerRawDataCollection>("VXD_RawTrackerHits");
+  auto& HelicalTrackHits = store.create<lcio2::TrackerHitCollection>("HelicalTrackHits");
 
   writer.registerForWrite("MCParticle");
   writer.registerForWrite("SiTrackerBarrelHits");
@@ -178,6 +156,12 @@ void writeEventTree(podio::EventStore& store,
   writer.registerForWrite("EM_ENDCAP");
   writer.registerForWrite("HAD_BARREL");
   writer.registerForWrite("HAD_ENDCAP");
+  writer.registerForWrite("PandoraPFOCollection");
+  writer.registerForWrite("BeamCalHits");
+  //writer.registerForWrite("VXD_RawTrackerHits");
+  writer.registerForWrite("HelicalTrackHits");
+
+
 
   EVENT::LCEvent* evt = 0 ;
   //evt = lcReader->readEvent(0);
@@ -318,12 +302,51 @@ void writeEventTree(podio::EventStore& store,
         }
       }
 
+      //"PandoraPFOCollection");
+      if( v == std::string("PandoraPFOCollection") ) {
+        int n_elem = a_collection->getNumberOfElements();
+        for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+          EVENT::ReconstructedParticle* elem  = dynamic_cast<EVENT::ReconstructedParticle*>( a_collection->getElementAt( i_elem ) ) ;
+          auto a_mcp = lcio2::to_lcio2(elem);
+          PandoraPFOCollection.push_back(a_mcp);
+        }
+      }
+
+      //"BeamCalHits");
+      if( v == std::string("BeamCalHits") ) {
+        int n_elem = a_collection->getNumberOfElements();
+        for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+          EVENT::SimCalorimeterHit* elem  = dynamic_cast<EVENT::SimCalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
+          auto a_mcp = lcio2::to_lcio2(elem);
+          BeamCalHits.push_back(a_mcp);
+        }
+      }
+
+      ////"VXD_RawTrackerHits");
+      //if( v == std::string("VXD_RawTrackerHits") ) {
+      //  int n_elem = a_collection->getNumberOfElements();
+      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+      //    EVENT::TrackerRawData* elem  = dynamic_cast<EVENT::TrackerRawData*>( a_collection->getElementAt( i_elem ) ) ;
+      //    auto a_mcp = lcio2::to_lcio2(elem);
+      //    VXD_RawTrackerHits.push_back(a_mcp);
+      //  }
+      //}
+
+      //"HelicalTrackHits");
+      if( v == std::string("HelicalTrackHits") ) {
+        int n_elem = a_collection->getNumberOfElements();
+        for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+          EVENT::TrackerHit* elem  = dynamic_cast<EVENT::TrackerHit*>( a_collection->getElementAt( i_elem ) ) ;
+          auto a_mcp = lcio2::to_lcio2(elem);
+          HelicalTrackHits.push_back(a_mcp);
+        }
+      }
 
     }
 
     nEvents ++ ;
 
-    treeEvt = (IMPL::LCEventImpl*) evt ;
+    //treeEvt = (IMPL::LCEventImpl*) evt ;
 
     //tree->Fill() ;
     writer.writeEvent();
@@ -382,8 +405,7 @@ int main(){
   //}
   //
   writeEventTree(store, 0, writer);
+  writer.finish();
 
-
-writer.finish();
   return 0;
 }
