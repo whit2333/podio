@@ -126,6 +126,15 @@ lcio2::MCParticle to_lcio2(EVENT::MCParticle* mcp)
       {p->getPosition()[0],p->getPosition()[1],p->getPosition()[2]});
   }
 
+  Track to_lcio2(EVENT::Track* t)
+  {
+    return Track(
+      t->getChi2(),
+      t->getNdf(),
+      t->getdEdx(),
+      t->getdEdxError(),
+      t->getRadiusOfInnermostHit());
+  }
 }
 
 #endif
