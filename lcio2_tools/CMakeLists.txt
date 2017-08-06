@@ -100,6 +100,7 @@ include_directories(
   "${PROJECT_SOURCE_DIR}/include"
   "${PROJECT_BINARY_DIR}"
   "${PROJECT_BINARY_DIR}/lcio"
+  "${LCIO_INCLUDE_DIRS}"
   "${ROOT_INCLUDE_DIRS}"
   "${podio_INCLUDE_DIRS}"
   )
