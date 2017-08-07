@@ -30,10 +30,19 @@ datatypes :
 # Datatypes are components that can be stored in a Collection
 
   lcio2::EventInfo :
-    Description : "Event Info Data"
-    Author : "C. Bernet, B. Hegner"
+    Description : "Event Data"
+    Author : "Whit Armstrong"
     Members :
-     - int Number // Event number
+     - int eventNumber // Event number
+     - int runNumber   // Event number
+   
+
+  lcio2::RunInfo :
+    Description : "Run Data"
+    Author : "Whit Armstrong"
+    Members :
+     - int runNumber // Event number
+       #- std::vector<string> info // arbitrary info
 
   lcio2::Particle :
     Description : "Naive Particle Type, used for reconstructed and generated particles"

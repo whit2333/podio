@@ -290,18 +290,38 @@ int main(int argc,char** argv) {
    }
 
    // Get the piped commands
-   std::vector<std::string> piped_commands;
-   if(!isatty(STDIN_FILENO)) {
-      std::cout << "Reading piped commands...\n";
-      std::string lineInput;
-      while(std::getline(std::cin,lineInput)) {
-         piped_commands.push_back(lineInput);
-      }
-   }
+   //std::vector<std::string> piped_commands;
+   //if(!isatty(STDIN_FILENO)) {
+   //   std::cout << "Reading piped commands...\n";
+   //   std::string lineInput;
+   //   while(std::getline(std::cin,lineInput)) {
+   //      piped_commands.push_back(lineInput);
+   //   }
+   //}
 
   auto reader = podio::ROOTReader();
   auto store  = podio::EventStore();
-  reader.openFile("example.root");
+
+  if(input_file_name == std::string("")) {
+    if(optind == argc){
+      std::cerr << "No input file supplied\n";
+      exit(EXIT_FAILURE);
+    }
+    if(optind == argc-1) {
+      input_file_name = argv[optind];
+    } else {
+      std::cerr << "Only one input file can be supplied:\n";
+      std::cout << theRest << std::endl;
+      exit(EXIT_FAILURE);
+    }
+  }
+  std::cout << input_file_name << std::endl;
+
+  if(output_file_name == std::string("")) {
+    output_file_name = input_file_name;
+  }
+
+  reader.openFile(input_file_name.c_str());
   //try {
   //  reader.openFile("example.root");
   //}
@@ -320,7 +340,7 @@ int main(int argc,char** argv) {
 
   // turn off compression for first run ...
   lcWrt->setCompressionLevel( 0 ) ;             
-  lcWrt->open( "test.slcio" , LCIO::WRITE_NEW )  ;
+  lcWrt->open( output_file_name , LCIO::WRITE_NEW )  ;
 
   LCRunHeaderImpl* runHdr = new LCRunHeaderImpl ; 
   runHdr->setRunNumber( rn ) ;
