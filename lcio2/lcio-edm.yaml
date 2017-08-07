@@ -100,13 +100,13 @@ datatypes :
     Members:
       - int pdg // The PDG code of the particle.
       - int genstatus   // The status for particles as defined by the generator.
-      - std::array<float, 3> vertex // The production vertex of the particle in [mm].
+      - std::array<double, 3> vertex // The production vertex of the particle in [mm].
       - float charge // The particle's charge.
       - float mass // The mass of the particle in [GeV]
       - float time // The creation time of the particle in [ns] wrt. the event, e.g. for preassigned decays or decays in flight from the simulator.
-      - std::array<float, 3> endpoint // The endpoint of the particle in [mm]
+      - std::array<double, 3> endpoint // The endpoint of the particle in [mm]
       - bool endpointSet  // Whether the endpoint has been set
-      - std::array<float, 3> momentum // The particle's 3-momentum at the production vertex in [GeV]
+      - std::array<double, 3> momentum // The particle's 3-momentum at the production vertex in [GeV]
     OneToManyRelations:
       - lcio2::MCParticle parents // The parents of this particle.
       - lcio2::MCParticle daughters // The daughters this particle.
@@ -154,11 +154,11 @@ datatypes :
     Members:
       - int cellID0  // The detector specific (geometrical) cell id.
       - int cellID1  // The second detector specific (geometrical) cell id.
-      - std::array<float, 3> position // The position of the hit in world coordinates.
+      - std::array<double, 3> position // The position of the hit in world coordinates.
       - float time   // The time of the hit in [ns].
       - float pathLength // path length
       - float EDep   // EDep
-      - std::array<float, 3> _p // position?
+      - std::array<float, 3> _p // momentum
     OneToOneRelations:
       - lcio2::MCParticle particle // The MCParticle that caused the hit.
 
@@ -201,7 +201,7 @@ datatypes :
       - int time    // The time of the hit.
       - float EDep  // EDep
       - float EDepError // error on EDep
-      - std::array<float, 3> position // position 
+      - std::array<double, 3> position // position 
         #      - std::vector<float> covMatrix // The calibrated ADC values
 
 #int 	_type

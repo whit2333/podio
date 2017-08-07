@@ -74,7 +74,7 @@ namespace lcio2 {
    *  @{
    */
   IMPL::MCParticleImpl*            from_lcio2(const MCParticle&            p);
-  IMPL::ClusterImpl*               from_lcio2(const Cluster*               c);
+  IMPL::ClusterImpl*               from_lcio2(const Cluster&               c);
   IMPL::SimCalorimeterHitImpl*     from_lcio2(const SimCalorimeterHit&     c);
   IMPL::RawCalorimeterHitImpl*     from_lcio2(const RawCalorimeterHit&     c);
   IMPL::CalorimeterHitImpl*        from_lcio2(const CalorimeterHit&        c);
