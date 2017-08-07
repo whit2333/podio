@@ -89,11 +89,11 @@
 
 template<class T>
 void add_collection_data(T& c, LCCollectionVec* legacy){
-  if( c.isValid() ){
-    for(const auto& p : c ){
+  //if( c.isValid() ){
+    for(auto& p : c ){
       legacy->push_back( lcio2::from_lcio2(p) ) ;
     }
-  }
+  //}
 }
 
 template<class T>
@@ -123,7 +123,7 @@ std::map<std::string,T*> get_col_by_id(podio::EventStore& store)
 }
 
 template<class T>
-void add_to_event(podio::EventStore& store, LCEventImpl* evt, std::map<std::string,T*> cols, const std::string& s)
+void add_to_event(podio::EventStore& store, LCEventImpl* evt, std::map<std::string,T*>& cols, const std::string& s)
 {
   for(auto& c: cols) {
     LCCollectionVec* lcvec= new LCCollectionVec(s);
@@ -180,22 +180,16 @@ void processToLegacy(podio::EventStore& store,
 //VXD_TrackerHits               TrackerHit                      14
 //---------------------------------------------------------------------------
 
-  //auto col_IDs_table = store.getCollectionIDTable();
-  //auto& col_names     = col_IDs_table->names();
-  //std::map<int, lcio2::MCParticleCollection*> collections;
-  //for(const auto& n : col_names) {
-  //  int cid = col_IDs_table->collectionID(n);
-  //  collections[cid] = get_collection<lcio2::MCParticleCollection>(cid,store);
-  //}
-
-  auto mcp_map = get_col_by_id<lcio2::MCParticleCollection>(store);
+  auto mcp_map           = get_col_by_id<lcio2::MCParticleCollection>(store);
   auto SimTrackerHit_map = get_col_by_id<lcio2::SimTrackerHitCollection>(store);
   auto TrackerHit_map    = get_col_by_id<lcio2::TrackerHitCollection>(store);
+  auto Tracks_map        = get_col_by_id<lcio2::Track>(store);
 
   //std::cout << " SimTrackerHit " << SimTrackerHit_map.size() << std::endl;
   add_to_event(store, evt, mcp_map,           LCIO::MCPARTICLE);
   add_to_event(store, evt, SimTrackerHit_map, LCIO::SIMTRACKERHIT);
   add_to_event(store, evt, TrackerHit_map,    LCIO::TRACKERHIT);
+  add_to_event(store, evt, Tracks_map,        LCIO::TRACK);
 
   //auto& mcps                 = store.get<lcio2::MCParticleCollection>("MCParticle");
   //auto& SiTrackerBarrelHits  = store.get<lcio2::SimTrackerHitCollection>("SiTrackerBarrelHits");
@@ -203,7 +197,7 @@ void processToLegacy(podio::EventStore& store,
   //auto& SiTrackerForwardHits = store.get<lcio2::SimTrackerHitCollection>("SiTrackerForwardHits");
   //auto& SiVertexBarrelHits   = store.get<lcio2::SimTrackerHitCollection>("SiVertexBarrelHits");
   //auto& SiVertexEndcapHits   = store.get<lcio2::SimTrackerHitCollection>("SiVertexEndcapHits");
-  auto& Tracks               = store.get<lcio2::TrackCollection>("Tracks");
+  //auto& Tracks               = store.get<lcio2::TrackCollection>("Tracks");
   auto& ReconClusters        = store.get<lcio2::ClusterCollection>("ReconClusters");
   auto& EM_BARREL            = store.get<lcio2::CalorimeterHitCollection>("EM_BARREL");
   auto& EM_ENDCAP            = store.get<lcio2::CalorimeterHitCollection>("EM_ENDCAP");
@@ -221,7 +215,7 @@ void processToLegacy(podio::EventStore& store,
   //LCCollectionVec* SiTrackerForwardHits_leg = new LCCollectionVec( LCIO::SIMTRACKERHIT );
   //LCCollectionVec* SiVertexBarrelHits_leg   = new LCCollectionVec( LCIO::SIMTRACKERHIT );
   //LCCollectionVec* SiVertexEndcapHits_leg   = new LCCollectionVec( LCIO::SIMTRACKERHIT );
-  LCCollectionVec* Tracks_leg               = new LCCollectionVec( LCIO::TRACK );
+  //LCCollectionVec* Tracks_leg               = new LCCollectionVec( LCIO::TRACK );
   LCCollectionVec* ReconClusters_leg        = new LCCollectionVec( LCIO::CLUSTER );
   LCCollectionVec* EM_BARREL_leg            = new LCCollectionVec( LCIO::CALORIMETERHIT );
   LCCollectionVec* EM_ENDCAP_leg            = new LCCollectionVec( LCIO::CALORIMETERHIT );
@@ -238,16 +232,15 @@ void processToLegacy(podio::EventStore& store,
   //add_collection_data(SiVertexBarrelHits  , SiVertexBarrelHits_leg  );
   //add_collection_data(SiVertexEndcapHits  , SiVertexEndcapHits_leg  );
 
-  add_collection_data(Tracks        , Tracks_leg  );
-  add_collection_data(ReconClusters , ReconClusters_leg  );
-  add_collection_data(EM_BARREL        , EM_BARREL_leg  );
-  add_collection_data(EM_ENDCAP        , EM_ENDCAP_leg  );
+  //add_collection_data(Tracks          , Tracks_leg  );
+  add_collection_data(ReconClusters     , ReconClusters_leg  );
+  add_collection_data(EM_BARREL         , EM_BARREL_leg  );
+  add_collection_data(EM_ENDCAP         , EM_ENDCAP_leg  );
   add_collection_data(HAD_BARREL        , HAD_BARREL_leg  );
   add_collection_data(HAD_ENDCAP        , HAD_ENDCAP_leg  );
-
-  add_collection_data(PandoraPFOCollection        , PandoraPFOCollection_leg  );
-  add_collection_data(BeamCalHits        , BeamCalHits_leg  );
-  //add_collection_data(HelicalTrackHits        , HelicalTrackHits_leg  );
+  add_collection_data(PandoraPFOCollection, PandoraPFOCollection_leg  );
+  add_collection_data(BeamCalHits         , BeamCalHits_leg  );
+  //add_collection_data(HelicalTrackHitsuj , HelicalTrackHits_leg  );
 
   //if(verbose) {
   //  std::cout << "MCParticle           : " << mcVec->getNumberOfElements() << std::endl;
@@ -264,7 +257,7 @@ void processToLegacy(podio::EventStore& store,
   //evt->addCollection( SiVertexBarrelHits_leg , "SiVertexBarrelHits" ) ;
   //evt->addCollection( SiVertexEndcapHits_leg , "SiVertexEndcapHits" ) ;
 
-  evt->addCollection( Tracks_leg , "Tracks" ) ;
+  //evt->addCollection( Tracks_leg , "Tracks" ) ;
   evt->addCollection( ReconClusters_leg , "ReconClusters" ) ;
   evt->addCollection( EM_BARREL_leg , "EM_BARREL" ) ;
   evt->addCollection( EM_ENDCAP_leg , "EM_ENDCAP" ) ;
