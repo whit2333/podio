@@ -1,6 +1,9 @@
 #ifndef ${name}OBJ_H
 #define ${name}OBJ_H
 
+// ROOT 
+#include "Math/Vector3D.h"
+
 // std includes
 #include <atomic>
 #include <iostream>

@@ -120,6 +120,13 @@ datatypes :
     OneToManyRelations:
       - lcio2::MCParticle parents // The parents of this particle.
       - lcio2::MCParticle daughters // The daughters this particle.
+    ExtraCode :
+      declaration: "
+      double Px() const {return momentum().at(0);}\n
+      double Py() const {return momentum().at(1);}\n
+      double Pz() const {return momentum().at(2);}\n
+      double theta() const { return  ROOT::Math::XYZVector(Px(),Py(),Pz()).Theta();}\n
+      "
 
   # LCIO ReconstructedParticle
   lcio2::ReconstructedParticle:
