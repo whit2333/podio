@@ -116,6 +116,8 @@ class ClassGenerator(object):
               rawclassname = "std::" + rawclassname
             if klass.startswith("std::vector"):
               rawclassname = "std::" + rawclassname
+            if klass.startswith("std::map"):
+              rawclassname = "std::" + rawclassname
             name = member["name"]
             description = member["description"]
             datatype_dict["members"].append("  %s %s;  ///<%s"
@@ -136,8 +138,14 @@ class ClassGenerator(object):
                                                      % klass)
             elif "std::array" in klass:
                 datatype_dict["includes"].append("#include <array>")
-            elif "vector" in klass:
+                if is_data:  # avoid having warnings twice
+                    self.warnings.append("%s defines a vector member %s, that spoils the PODness" % (classname, klass))
+            elif "std::vector" in klass:
                 datatype_dict["includes"].append("#include <vector>")
+                if is_data:  # avoid having warnings twice
+                    self.warnings.append("%s defines a vector member %s, that spoils the PODness" % (classname, klass))
+            elif "std::map" in klass:
+                datatype_dict["includes"].append("#include <map>")
                 if is_data:  # avoid having warnings twice
                     self.warnings.append("%s defines a vector member %s, that spoils the PODness" % (classname, klass))
             elif "[" in klass and is_data:  # FIXME: is this only true ofr PODs?
@@ -266,6 +274,8 @@ class ClassGenerator(object):
           datatype["includes"].append("#include <array>")
         elif "std::vector" in klass:
           datatype["includes"].append("#include <vector>")
+        elif "std::map" in klass:
+          datatype["includes"].append("#include <map>")
         else:
           raise Exception("'%s' declares a non-allowed many-relation to '%s'!" %(classname, klass))
 
@@ -278,7 +288,7 @@ class ClassGenerator(object):
         gname,sname = name,name
         mnamespace2 = ""
         klassname2 = klass
-        if "::" in klass and not klass.startswith("std::array") and not klass.startswith("std::vector"):
+        if "::" in klass and not klass.startswith("std::array") and not klass.startswith("std::vector") and not klass.startswith("std::map"):
           mnamespace2, klassname2 = klass.split("::")
 
         if( self.getSyntax ):
@@ -308,6 +318,17 @@ class ClassGenerator(object):
           getter_implementations += implementations["array_member_getter"].format(type=item_class, classname=rawclassname, name=name, fname=sname)
           ConstGetter_implementations += implementations["const_array_member_getter"].format(type=item_class, classname=rawclassname, name=name, fname=sname, description=desc)
         elif klass.startswith("std::vector"):
+          setter_declarations += declarations["member_builtin_setter"].format(type=klass, name=name, fname=sname, description=desc)
+          setter_implementations += implementations["member_builtin_setter"].format(type=klass, classname=rawclassname, name=name, fname=sname)
+          item_class = klass.split("<")[1].split(">")[0].strip()
+          #print item_class
+          item_ns, item_rawclassname, item_namespace_open, item_namespace_close = self.demangle_classname(item_class)
+          setter_declarations += declarations["array_builtin_setter"].format(type=item_class, name=name, fname=sname, description=desc)
+          setter_implementations += implementations["array_builtin_setter"].format(type=item_class, classname=rawclassname, name=name, fname=sname)
+          getter_declarations += declarations["array_member_getter"].format(type=item_class, name=name, fname=sname, description=desc)
+          getter_implementations += implementations["array_member_getter"].format(type=item_class, classname=rawclassname, name=name, fname=sname)
+          ConstGetter_implementations += implementations["const_array_member_getter"].format(type=item_class, classname=rawclassname, name=name, fname=sname, description=desc)
+        elif klass.startswith("std::map"):
           setter_declarations += declarations["member_builtin_setter"].format(type=klass, name=name, fname=sname, description=desc)
           setter_implementations += implementations["member_builtin_setter"].format(type=klass, classname=rawclassname, name=name, fname=sname)
           item_class = klass.split("<")[1].split(">")[0].strip()
@@ -355,7 +376,7 @@ class ClassGenerator(object):
         ConstGetter_implementations += implementations["const_member_getter"].format(type=klass, classname=rawclassname, name=name, fname=gname, description=desc)
 
         #print rawclassname
-        if "::" in klass and (not klass.startswith("std::array") and not klass.startswith("std::vector")):
+        if "::" in klass and (not klass.startswith("std::array") and not klass.startswith("std::vector") and not klass.startswith("std::map")):
         #  rawclassname = "std::" + rawclassname
           nameA, nameB = klass.split("::")
         else:
@@ -604,7 +625,7 @@ class ClassGenerator(object):
 
         if( self.getSyntax ):
           name  = "get" + name[:1].upper() + name[1:]
-        if not t.startswith("std::array") and not t.startswith("std::vector"):
+        if not t.startswith("std::array") and not t.startswith("std::vector") and not t.startswith("std::map"):
           ostream_implementation += (' << std::setw(%i) << v[i].%s() << " "' % ( numColWidth, name ) ) 
 
       ostream_implementation = ostream_implementation.replace( "{header_string}",  ostream_header_string ) 
@@ -818,7 +839,7 @@ class ClassGenerator(object):
   #    for name, klass in components.iteritems():
         if( name != "ExtraCode"):
 
-          if not klass.startswith("std::array") and not klass.startswith("std::vector"):
+          if not klass.startswith("std::array") and not klass.startswith("std::vector") and not klass.startswith("std::map"):
             ostreamComponents +=  ( '  o << value.%s << " " ;\n' %  name  ) 
 
           klassname = klass
@@ -837,6 +858,8 @@ class ClassGenerator(object):
               includes.append("#include <array>\n")
           if "std::vector" in klass:
               includes.append("#include <vector>\n")
+          if "std::map" in klass:
+              includes.append("#include <map>\n")
         else:
           # handle user provided extra code
           if klass.has_key("declaration"):
@@ -974,6 +997,8 @@ class ClassGenerator(object):
         if klass.startswith("std::array"):
           rawclassname = "std::" + rawclassname
         if klass.startswith("std::vector"):
+          rawclassname = "std::" + rawclassname
+        if klass.startswith("std::map"):
           rawclassname = "std::" + rawclassname
         substitutions = { "classname" : classname,
                         "member"    : name,
