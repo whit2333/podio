@@ -102,9 +102,9 @@ std::map<std::string, T2*>  build_collection_map(LCEvent* evt, podio::EventStore
   return res;
 }
 
-
 template<class T>
-void fill_collections(LCEvent* evt, const std::string& v, T& cols_map, bool vrb = false  ){
+void fill_collections(LCEvent* evt, const std::string& v, T& cols_map, bool vrb = false  )
+{
   if( cols_map.count(v) > 0 ){
     auto a_col = cols_map.at(v);
     auto a_collection = evt->getCollection(v);
@@ -137,7 +137,7 @@ int main(int argc,char** argv) {
   int          run_number        = 0;
   int          number_of_events  = -1;
   int          event_start_offset = 0;
-  std::string  input_file_name   = "legacy_reconstruction_datafile.slcio";
+  std::string  input_file_name   = "";//legacy_reconstruction_datafile.slcio";
   std::string  output_file_name  = "";
   std::string  output_tree_name  = "";
   std::string  output_dir        = "";
@@ -229,12 +229,14 @@ int main(int argc,char** argv) {
 
   if(input_file_name == std::string("")) {
     if(optind == argc){
+      print_help();
       std::cerr << "No input file supplied\n";
       exit(EXIT_FAILURE);
     }
     if(optind == argc-1) {
       input_file_name = argv[optind];
     } else {
+      print_help();
       std::cerr << "Only one input file can be supplied:\n";
       std::cout << theRest << std::endl;
       exit(EXIT_FAILURE);
@@ -243,15 +245,14 @@ int main(int argc,char** argv) {
   std::cout << input_file_name << std::endl;
 
   if(output_file_name == std::string("")) {
-    output_file_name = input_file_name;
+    output_file_name = input_file_name + std::string(".root");
   }
 
 
   //auto reader = podio::ROOTReader();
   auto store = podio::EventStore();
-  auto writer = podio::ROOTWriter("example.root", &store);
+  auto writer = podio::ROOTWriter(output_file_name, &store);
 
-  //--- create a ROOT file, a tree and a branch ...
   int nEvents = 0  ;
   int maxEvt = 10000 ; 
   IO::LCReader* lcReader = IOIMPL::LCFactory::getInstance()->createLCReader() ;
