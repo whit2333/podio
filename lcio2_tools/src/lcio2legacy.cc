@@ -146,39 +146,40 @@ void processToLegacy(podio::EventStore& store,
                      int rn,
                      int eventNumber)
 {
-//BeamCalHits                   SimCalorimeterHit              695 
-//CalorimeterHitRelations       LCRelation                     589
-//EM_BARREL                     CalorimeterHit                   4            
-//EM_ENDCAP                     CalorimeterHit                 558
-//HAD_BARREL                    CalorimeterHit                   0
-//HAD_ENDCAP                    CalorimeterHit                  27
-//HelicalTrackHitRelations      LCRelation                      47
-//HelicalTrackHits              TrackerHit                      34
-//HelicalTrackMCRelations       LCRelation                      34
-//LumiCalHits                   SimCalorimeterHit               34
-//MCInfo                        LCGenericObject                  1
-//MCParameters                  LCGenericObject                  1
-//MCParticle                    MCParticle                      43
-//MUON_BARREL                   CalorimeterHit                   0
-//MUON_ENDCAP                   CalorimeterHit                   0
-//MuonBarrelHits                SimCalorimeterHit                0
-//MuonEndcapHits                SimCalorimeterHit                0
-//PandoraPFOCollection          ReconstructedParticle            6
-//ReconClusters                 Cluster                          6
-//SiTrackerBarrelHits           SimTrackerHit                   24
-//SiTrackerEndcapHits           SimTrackerHit                   45
-//SiTrackerForwardHits          SimTrackerHit                    5
-//SiVertexBarrelHits            SimTrackerHit                    2
-//SiVertexEndcapHits            SimTrackerHit                    7
-//StateAtECal                   LCGenericObject                  1
-//StateAtEnd                    LCGenericObject                  1
-//StateAtStart                  LCGenericObject                  1
-//TKR_RawTrackerHits            TrackerRawData                  89
-//TKR_TrackerHits               TrackerHit                      40
-//Tracks                        Track                            1
-//VXD_RawTrackerHits            TrackerRawData                  26
-//VXD_TrackerHits               TrackerHit                      14
-//---------------------------------------------------------------------------
+
+  //BeamCalHits                   SimCalorimeterHit              695 
+  //CalorimeterHitRelations       LCRelation                     589
+  //EM_BARREL                     CalorimeterHit                   4            
+  //EM_ENDCAP                     CalorimeterHit                 558
+  //HAD_BARREL                    CalorimeterHit                   0
+  //HAD_ENDCAP                    CalorimeterHit                  27
+  //HelicalTrackHitRelations      LCRelation                      47
+  //HelicalTrackHits              TrackerHit                      34
+  //HelicalTrackMCRelations       LCRelation                      34
+  //LumiCalHits                   SimCalorimeterHit               34
+  //MCInfo                        LCGenericObject                  1
+  //MCParameters                  LCGenericObject                  1
+  //MCParticle                    MCParticle                      43
+  //MUON_BARREL                   CalorimeterHit                   0
+  //MUON_ENDCAP                   CalorimeterHit                   0
+  //MuonBarrelHits                SimCalorimeterHit                0
+  //MuonEndcapHits                SimCalorimeterHit                0
+  //PandoraPFOCollection          ReconstructedParticle            6
+  //ReconClusters                 Cluster                          6
+  //SiTrackerBarrelHits           SimTrackerHit                   24
+  //SiTrackerEndcapHits           SimTrackerHit                   45
+  //SiTrackerForwardHits          SimTrackerHit                    5
+  //SiVertexBarrelHits            SimTrackerHit                    2
+  //SiVertexEndcapHits            SimTrackerHit                    7
+  //StateAtECal                   LCGenericObject                  1
+  //StateAtEnd                    LCGenericObject                  1
+  //StateAtStart                  LCGenericObject                  1
+  //TKR_RawTrackerHits            TrackerRawData                  89
+  //TKR_TrackerHits               TrackerHit                      40
+  //Tracks                        Track                            1
+  //VXD_RawTrackerHits            TrackerRawData                  26
+  //VXD_TrackerHits               TrackerHit                      14
+  //---------------------------------------------------------------------------
 
   auto mcp_map           = get_col_by_id<lcio2::MCParticleCollection>(store);
   auto SimTrackerHit_map = get_col_by_id<lcio2::SimTrackerHitCollection>(store);
@@ -199,222 +200,88 @@ void processToLegacy(podio::EventStore& store,
   add_to_event(store, evt, ReconParticle_map ,LCIO::RECONSTRUCTEDPARTICLE);
   add_to_event(store, evt, SimCalHit_Mmap_map,LCIO::SIMCALORIMETERHIT);
 
-  //auto& mcps                 = store.get<lcio2::MCParticleCollection>("MCParticle");
-  //auto& SiTrackerBarrelHits  = store.get<lcio2::SimTrackerHitCollection>("SiTrackerBarrelHits");
-  //auto& SiTrackerEndcapHits  = store.get<lcio2::SimTrackerHitCollection>("SiTrackerEndcapHits");
-  //auto& SiTrackerForwardHits = store.get<lcio2::SimTrackerHitCollection>("SiTrackerForwardHits");
-  //auto& SiVertexBarrelHits   = store.get<lcio2::SimTrackerHitCollection>("SiVertexBarrelHits");
-  //auto& SiVertexEndcapHits   = store.get<lcio2::SimTrackerHitCollection>("SiVertexEndcapHits");
-  //auto& Tracks               = store.get<lcio2::TrackCollection>("Tracks");
-  //auto& ReconClusters        = store.get<lcio2::ClusterCollection>("ReconClusters");
-  //auto& EM_BARREL            = store.get<lcio2::CalorimeterHitCollection>("EM_BARREL");
-  //auto& EM_ENDCAP            = store.get<lcio2::CalorimeterHitCollection>("EM_ENDCAP");
-  //auto& HAD_BARREL           = store.get<lcio2::CalorimeterHitCollection>("HAD_BARREL");
-  //auto& HAD_ENDCAP           = store.get<lcio2::CalorimeterHitCollection>("HAD_ENDCAP");
-  //auto& PandoraPFOCollection = store.get<lcio2::ReconstructedParticleCollection>("PandoraPFOCollection");
-  //auto& BeamCalHits          = store.get<lcio2::SimCalorimeterHitCollection>("BeamCalHits");
-  //auto& VXD_RawTrackerHits = store.get<lcio2::TrackerRawDataCollection>("VXD_RawTrackerHits");
-  //auto& HelicalTrackHits     = store.get<lcio2::TrackerHitCollection>("HelicalTrackHits");
-
-  // create and add some mc particles 
-  //LCCollectionVec* mcVec                    = new LCCollectionVec( LCIO::MCPARTICLE );
-  //LCCollectionVec* SiTrackerBarrelHits_leg  = new LCCollectionVec( LCIO::SIMTRACKERHIT );
-  //LCCollectionVec* SiTrackerEndcapHits_leg  = new LCCollectionVec( LCIO::SIMTRACKERHIT );
-  //LCCollectionVec* SiTrackerForwardHits_leg = new LCCollectionVec( LCIO::SIMTRACKERHIT );
-  //LCCollectionVec* SiVertexBarrelHits_leg   = new LCCollectionVec( LCIO::SIMTRACKERHIT );
-  //LCCollectionVec* SiVertexEndcapHits_leg   = new LCCollectionVec( LCIO::SIMTRACKERHIT );
-  //LCCollectionVec* Tracks_leg               = new LCCollectionVec( LCIO::TRACK );
-  //LCCollectionVec* ReconClusters_leg        = new LCCollectionVec( LCIO::CLUSTER );
-  //LCCollectionVec* EM_BARREL_leg            = new LCCollectionVec( LCIO::CALORIMETERHIT );
-  //LCCollectionVec* EM_ENDCAP_leg            = new LCCollectionVec( LCIO::CALORIMETERHIT );
-  //LCCollectionVec* HAD_BARREL_leg           = new LCCollectionVec( LCIO::CALORIMETERHIT );
-  //LCCollectionVec* HAD_ENDCAP_leg           = new LCCollectionVec( LCIO::CALORIMETERHIT );
-  //LCCollectionVec* PandoraPFOCollection_leg = new LCCollectionVec( LCIO::RECONSTRUCTEDPARTICLE );
-  //LCCollectionVec* BeamCalHits_leg          = new LCCollectionVec( LCIO::SIMCALORIMETERHIT );
-  //LCCollectionVec* HelicalTrackHits_leg     = new LCCollectionVec( LCIO::TRACKERHIT );
-
-  //add_collection_data(mcps, mcVec);
-  //add_collection_data(SiTrackerBarrelHits , SiTrackerBarrelHits_leg );
-  //add_collection_data(SiTrackerEndcapHits , SiTrackerEndcapHits_leg );
-  //add_collection_data(SiTrackerForwardHits, SiTrackerForwardHits_leg);
-  //add_collection_data(SiVertexBarrelHits  , SiVertexBarrelHits_leg  );
-  //add_collection_data(SiVertexEndcapHits  , SiVertexEndcapHits_leg  );
-
-  //add_collection_data(Tracks          , Tracks_leg  );
-  //add_collection_data(ReconClusters     , ReconClusters_leg  );
-  //add_collection_data(EM_BARREL         , EM_BARREL_leg  );
-  //add_collection_data(EM_ENDCAP         , EM_ENDCAP_leg  );
-  //add_collection_data(HAD_BARREL        , HAD_BARREL_leg  );
-  //add_collection_data(HAD_ENDCAP        , HAD_ENDCAP_leg  );
-  //add_collection_data(PandoraPFOCollection, PandoraPFOCollection_leg  );
-  //add_collection_data(BeamCalHits         , BeamCalHits_leg  );
-  //add_collection_data(HelicalTrackHitsuj , HelicalTrackHits_leg  );
-
-  //if(verbose) {
-  //  std::cout << "MCParticle           : " << mcVec->getNumberOfElements() << std::endl;
-  //  std::cout << "SiTrackerBarrelHits  : " << SiTrackerBarrelHits_leg->getNumberOfElements() << std::endl;
-  //  std::cout << "SiTrackerEndcapHits  : " << SiTrackerEndcapHits_leg->getNumberOfElements() << std::endl;
-  //  std::cout << "SiTrackerForwardHits : " << SiTrackerForwardHits_leg->getNumberOfElements() << std::endl;
-  //  std::cout << "SiVertexBarrelHits   : " << SiVertexBarrelHits_leg->getNumberOfElements() << std::endl;
-  //  std::cout << "SiVertexEndcapHits   : " << SiVertexEndcapHits_leg->getNumberOfElements() << std::endl;
-  //}
-  //evt->addCollection( mcVec , "MCParticle" ) ;
-  //evt->addCollection( SiTrackerBarrelHits_leg , "SiTrackerBarrelHits" ) ;
-  //evt->addCollection( SiTrackerEndcapHits_leg , "SiTrackerEndcapHits" ) ;
-  //evt->addCollection( SiTrackerForwardHits_leg , "SiTrackerForwardHits" ) ;
-  //evt->addCollection( SiVertexBarrelHits_leg , "SiVertexBarrelHits" ) ;
-  //evt->addCollection( SiVertexEndcapHits_leg , "SiVertexEndcapHits" ) ;
-
-  //evt->addCollection( Tracks_leg , "Tracks" ) ;
-  //evt->addCollection( ReconClusters_leg , "ReconClusters" ) ;
-  //evt->addCollection( EM_BARREL_leg , "EM_BARREL" ) ;
-  //evt->addCollection( EM_ENDCAP_leg , "EM_ENDCAP" ) ;
-  //evt->addCollection( HAD_BARREL_leg , "HAD_BARREL" ) ;
-  //evt->addCollection( HAD_ENDCAP_leg , "HAD_ENDCAP" ) ;
-  //evt->addCollection( PandoraPFOCollection_leg , "PandoraPFOCollection" ) ;
-  //evt->addCollection( BeamCalHits_leg , "BeamCalHits" ) ;
-  //evt->addCollection( HelicalTrackHits_leg , "HelicalTrackHits" ) ;
-
-  //MCParticleImpl* mom = new MCParticleImpl ;
-  //mom->setPDG( 1  ) ;
-  //float p0[3] = { 0. , 0. , 1000. } ;
-  //mom->setMomentum( p0 ) ;
-  //mom->setMass( 3.01 ) ;
-
-  //for(int j=0;j<10;j++){
-
-    //MCParticleImpl* mcp = new MCParticleImpl ;
-
-    //mcp->setPDG( 1000 * (j+1)  ) ;
-    //float p[3] = { float(j*1.) , float(4./1024.) , float(8./1024.) } ;
-    //mcp->setMomentum( p ) ;
-    //mcp->setMass( .135 ) ;
-
-    //// create and add some daughters
-    //for(int k=0;k<3;k++){
-    //  MCParticleImpl* d1 = new MCParticleImpl ;
-
-    //  d1->setPDG( 1000 * (j+1) + 100 * (k+1)  ) ;
-    //  float pd1[3] = {  float(k*1.) ,  float(4.1) ,  float(8.1) } ;
-    //  d1->setMomentum( pd1 ) ;
-    //  d1->setMass( .135 ) ;
-
-    //  for(int l=0;l<2;l++){
-    //    MCParticleImpl* d2 = new MCParticleImpl ;
-
-    //    d2->setPDG( 1000 * (j+1) + 100 * (k+1) + 10 *  (l+1)  ) ;
-    //    float pd2[3] = {  float(l*1.) ,  float(0.41) ,  float(4.1) } ;
-    //    d2->setMomentum( pd2 ) ;
-    //    d2->setMass( .135 ) ;
-
-    //    double ep[3] = { 1.111111 , 2.2222222, 3.3333333 } ;
-    //    d2->setEndpoint( ep ) ;
-    //    //	      d2->setSimulatorStatus( 1234 ) ;
-    //    d2->setCreatedInSimulation(true) ;
-    //    d2->setBackscatter(true)         ;
-    //    d2->setDecayedInTracker(true)    ;
-    //    d2->setDecayedInCalorimeter(false);
-    //    d2->setHasLeftDetector(false)     ;
-    //    d2->setStopped(true)             ;
-
-    //    d2->addParent( d1 );
-    //    mcVec->push_back( d2 ) ;
-
-    //    // debug only - add the same particle to more than one collection
-    //    //mcVec2->push_back( d2 ) ;
-    //  }
-    //  d1->addParent( mcp );
-    //  mcVec->push_back( d1 ) ;
-    //}
-
-    //mcp->addParent( mom );
-    //mcVec->push_back( mcp ) ;
-  //}
-  //mcVec->push_back( mom ) ;
-
-  // add all collections to the event
-
+  // TODO: Add relations
 }
 
 
 int main(int argc,char** argv) {
 
-   int          run_number        = 0;
-   int          number_of_events  = -1;
-   int          event_start_offset = 0;
-   std::string  input_file_name   = "";
-   std::string  output_file_name  = "";
-   std::string  output_tree_name  = "";
-   std::string  output_dir        = "";
-   std::string  theRest           = "";
+  int          run_number        = 0;
+  int          number_of_events  = -1;
+  int          event_start_offset = 0;
+  std::string  input_file_name   = "";
+  std::string  output_file_name  = "";
+  std::string  output_tree_name  = "";
+  std::string  output_dir        = "";
+  std::string  theRest           = "";
 
-   //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
 
-   int index = 0;
-   int iarg  = 0;
-   opterr    = 1; //turn off getopt error message
-   const struct option longopts[] =
-   {
-      {"run",         required_argument,  0, 'r'},
-      {"input",       required_argument,  0, 'i'},
-      {"output",      required_argument,  0, 'o'},
-      {"dir",         required_argument,  0, 'D'},
-      {"treename",    required_argument,  0, 't'},
-      {"events",      required_argument,  0, 'n'},
-      {"offset",      required_argument,  0, 'O'},
-      {"help",        no_argument,        0, 'h'},
-      {0,0,0,0}
-   };
-   while(iarg != -1) {
-      iarg = getopt_long(argc, argv, "o:t:D:r:i:O:n:h", longopts, &index);
+  int index = 0;
+  int iarg  = 0;
+  opterr    = 1; //turn off getopt error message
+  const struct option longopts[] =
+  {
+    {"run",         required_argument,  0, 'r'},
+    {"input",       required_argument,  0, 'i'},
+    {"output",      required_argument,  0, 'o'},
+    {"dir",         required_argument,  0, 'D'},
+    {"treename",    required_argument,  0, 't'},
+    {"events",      required_argument,  0, 'n'},
+    {"offset",      required_argument,  0, 'O'},
+    {"help",        no_argument,        0, 'h'},
+    {0,0,0,0}
+  };
+  while(iarg != -1) {
+    iarg = getopt_long(argc, argv, "o:t:D:r:i:O:n:h", longopts, &index);
 
-      switch (iarg)
-      {
-         case 'i':
-            input_file_name = optarg;
-            break;
+    switch (iarg)
+    {
+      case 'i':
+        input_file_name = optarg;
+        break;
 
-         case 'r':
-            run_number = atoi( optarg );
-            break;
+      case 'r':
+        run_number = atoi( optarg );
+        break;
 
-         case 'n':
-            number_of_events = atoi( optarg );
-            break;
+      case 'n':
+        number_of_events = atoi( optarg );
+        break;
 
-         case 'O':
-            event_start_offset = atoi( optarg );
-            if(event_start_offset < 0 ) {
-               std::cout << "Error: -O, --offset is negative! Aborting.\n";
-               std::exit(EXIT_FAILURE);
-            }
-            break;
+      case 'O':
+        event_start_offset = atoi( optarg );
+        if(event_start_offset < 0 ) {
+          std::cout << "Error: -O, --offset is negative! Aborting.\n";
+          std::exit(EXIT_FAILURE);
+        }
+        break;
 
-         case 't':
-            output_tree_name = optarg;
-            break;
+      case 't':
+        output_tree_name = optarg;
+        break;
 
-         case 'D':
-            output_dir = optarg;
-            break;
+      case 'D':
+        output_dir = optarg;
+        break;
 
-         case 'o':
-            output_file_name = optarg;
-            if( fexists(output_file_name) ) {
-               std::cout << "Error : " << output_file_name << " already exist"  << std::endl;
-               exit(EXIT_FAILURE);
-            }
-            break;
+      case 'o':
+        output_file_name = optarg;
+        if( fexists(output_file_name) ) {
+          std::cout << "Error : " << output_file_name << " already exist"  << std::endl;
+          exit(EXIT_FAILURE);
+        }
+        break;
 
-         case 'h':
-            print_help();
-            exit(0);
-            break;
+      case 'h':
+        print_help();
+        exit(0);
+        break;
 
-         case '?':
-            print_help();
-            exit(EXIT_FAILURE);
-            break;
+      case '?':
+        print_help();
+        exit(EXIT_FAILURE);
+        break;
       }
    }
 

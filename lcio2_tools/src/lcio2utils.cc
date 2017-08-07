@@ -28,7 +28,11 @@ namespace lcio2 {
       {0,0,0, 0,0,0},
       c->getITheta(),
       c->getIPhi(),
-      {0,0,0} );
+      {0,0,0},
+      c->getShape(),
+      {0}, // FIXME: what are the weights used for?
+      c->getSubdetectorEnergies()
+      );
   }
 
   SimCalorimeterHit to_lcio2(EVENT::SimCalorimeterHit* c)
@@ -149,6 +153,9 @@ namespace lcio2 {
     p->setITheta(  c.theta() );
     p->setIPhi(  c.phi() );
     p->setDirectionError( c.directionError().data() );
+    p->setShape(c.shape());
+    //p->setWeight(c.weight());
+    p->subdetectorEnergies() = c.subdetectorEnergies();
     return p;
   }
 
