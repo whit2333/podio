@@ -121,7 +121,7 @@ void fill_collections(LCEvent* evt, const std::string& v, T& cols_map, bool vrb 
       a_col->push_back(a_mcp);
     }
     if( vrb ){
-      std::cout << "MCPs  : " << a_col->size()  << std::endl;
+      std::cout << std::setw(30) << v <<  " : " << a_col->size()  << std::endl;
     }
   }
 }
@@ -297,16 +297,16 @@ int main(int argc,char** argv) {
   //auto& SiTrackerForwardHits = store.create<lcio2::SimTrackerHitCollection>("SiTrackerForwardHits");
   //auto& SiVertexBarrelHits  = store.create<lcio2::SimTrackerHitCollection>("SiVertexBarrelHits");
   //auto& SiVertexEndcapHits  = store.create<lcio2::SimTrackerHitCollection>("SiVertexEndcapHits");
-  auto& Tracks = store.create<lcio2::TrackCollection>("Tracks");
-  auto& ReconClusters = store.create<lcio2::ClusterCollection>("ReconClusters");
-  auto& EM_BARREL = store.create<lcio2::CalorimeterHitCollection>("EM_BARREL");
-  auto& EM_ENDCAP = store.create<lcio2::CalorimeterHitCollection>("EM_ENDCAP");
-  auto& HAD_BARREL = store.create<lcio2::CalorimeterHitCollection>("HAD_BARREL");
-  auto& HAD_ENDCAP = store.create<lcio2::CalorimeterHitCollection>("HAD_ENDCAP");
-  auto& PandoraPFOCollection = store.create<lcio2::ReconstructedParticleCollection>("PandoraPFOCollection");
-  auto& BeamCalHits = store.create<lcio2::SimCalorimeterHitCollection>("BeamCalHits");
-  //auto& VXD_RawTrackerHits = store.create<lcio2::TrackerRawDataCollection>("VXD_RawTrackerHits");
-  auto& HelicalTrackHits = store.create<lcio2::TrackerHitCollection>("HelicalTrackHits");
+  //auto& Tracks = store.create<lcio2::TrackCollection>("Tracks");
+  //auto& ReconClusters = store.create<lcio2::ClusterCollection>("ReconClusters");
+  //auto& EM_BARREL = store.create<lcio2::CalorimeterHitCollection>("EM_BARREL");
+  //auto& EM_ENDCAP = store.create<lcio2::CalorimeterHitCollection>("EM_ENDCAP");
+  //auto& HAD_BARREL = store.create<lcio2::CalorimeterHitCollection>("HAD_BARREL");
+  //auto& HAD_ENDCAP = store.create<lcio2::CalorimeterHitCollection>("HAD_ENDCAP");
+  //auto& PandoraPFOCollection = store.create<lcio2::ReconstructedParticleCollection>("PandoraPFOCollection");
+  //auto& BeamCalHits = store.create<lcio2::SimCalorimeterHitCollection>("BeamCalHits");
+  ////auto& VXD_RawTrackerHits = store.create<lcio2::TrackerRawDataCollection>("VXD_RawTrackerHits");
+  //auto& HelicalTrackHits = store.create<lcio2::TrackerHitCollection>("HelicalTrackHits");
 
   //writer.registerForWrite("MCParticle");
   //writer.registerForWrite("SiTrackerBarrelHits");
@@ -314,16 +314,16 @@ int main(int argc,char** argv) {
   //writer.registerForWrite("SiTrackerForwardHits");
   //writer.registerForWrite("SiVertexBarrelHits");
   //writer.registerForWrite("SiVertexEndcapHits");
-  writer.registerForWrite("Tracks");
-  writer.registerForWrite("ReconClusters");
-  writer.registerForWrite("EM_BARREL");
-  writer.registerForWrite("EM_ENDCAP");
-  writer.registerForWrite("HAD_BARREL");
-  writer.registerForWrite("HAD_ENDCAP");
-  writer.registerForWrite("PandoraPFOCollection");
-  writer.registerForWrite("BeamCalHits");
-  //writer.registerForWrite("VXD_RawTrackerHits");
-  writer.registerForWrite("HelicalTrackHits");
+  //writer.registerForWrite("Tracks");
+  //writer.registerForWrite("ReconClusters");
+  //writer.registerForWrite("EM_BARREL");
+  //writer.registerForWrite("EM_ENDCAP");
+  //writer.registerForWrite("HAD_BARREL");
+  //writer.registerForWrite("HAD_ENDCAP");
+  //writer.registerForWrite("PandoraPFOCollection");
+  //writer.registerForWrite("BeamCalHits");
+  ////writer.registerForWrite("VXD_RawTrackerHits");
+  //writer.registerForWrite("HelicalTrackHits");
 
   // -----------------------------------------------
   // Get the first event to build collections
@@ -331,8 +331,14 @@ int main(int argc,char** argv) {
   run_number   = evt->getRunNumber();
   int  event_number = evt->getEventNumber();
 
-  auto mcp_map = build_collection_map<EVENT::MCParticle, lcio2::MCParticleCollection>(evt, store, writer);
-  auto SimTrackerHit_map = build_collection_map<EVENT::SimTrackerHit, lcio2::SimTrackerHitCollection>(evt, store, writer);
+  auto mcp_map                   = build_collection_map<EVENT::MCParticle, lcio2::MCParticleCollection>(evt, store, writer);
+  auto SimTrackerHit_map         = build_collection_map<EVENT::SimTrackerHit, lcio2::SimTrackerHitCollection>(evt, store, writer);
+  auto TrackerHit_map            = build_collection_map<EVENT::TrackerHit, lcio2::TrackerHitCollection>(evt, store, writer);
+  auto SimCalorimeterHit_map     = build_collection_map<EVENT::SimCalorimeterHit, lcio2::SimCalorimeterHitCollection>(evt, store, writer);
+  auto CalorimeterHit_map        = build_collection_map<EVENT::CalorimeterHit, lcio2::CalorimeterHitCollection>(evt, store, writer);
+  auto Track_map                 = build_collection_map<EVENT::Track, lcio2::TrackCollection>(evt, store, writer);
+  auto Cluster_map               = build_collection_map<EVENT::Cluster, lcio2::ClusterCollection>(evt, store, writer);
+  auto ReconstructedParticle_map = build_collection_map<EVENT::ReconstructedParticle, lcio2::ReconstructedParticleCollection>(evt, store, writer);
 
   //auto collections  = evt->getCollectionNames();
   //for(const auto& v : (*collections) ) {
@@ -368,7 +374,12 @@ int main(int argc,char** argv) {
 
       fill_collections( evt, v, mcp_map, vrb );
       fill_collections( evt, v, SimTrackerHit_map, vrb );
-
+      fill_collections( evt, v, TrackerHit_map           , vrb );
+      fill_collections( evt, v, SimCalorimeterHit_map    , vrb );
+      fill_collections( evt, v, CalorimeterHit_map       , vrb );
+      fill_collections( evt, v, Track_map                , vrb );
+      fill_collections( evt, v, Cluster_map              , vrb );
+      fill_collections( evt, v, ReconstructedParticle_map, vrb );
 
       //if( mcp_map.count(v) > 0 ){
       //  auto a_col = mcp_map.at(v);
@@ -445,99 +456,99 @@ int main(int argc,char** argv) {
       //}
 
       //"Tracks"
-      if( v == std::string("Tracks") ) {
-        int n_elem = a_collection->getNumberOfElements();
-        for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-          EVENT::Track* elem  = dynamic_cast<EVENT::Track*>( a_collection->getElementAt( i_elem ) ) ;
-          auto a_mcp = lcio2::to_lcio2(elem);
-          Tracks.push_back(a_mcp);
-        }
-      }
-      //"ReconClusters");
-      if( v == std::string("ReconClusters") ) {
-        int n_elem = a_collection->getNumberOfElements();
-        for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-          EVENT::Cluster* elem  = dynamic_cast<EVENT::Cluster*>( a_collection->getElementAt( i_elem ) ) ;
-          auto a_mcp = lcio2::to_lcio2(elem);
-          ReconClusters.push_back(a_mcp);
-        }
-      }
-      //"EM_BARREL");
-      if( v == std::string("EM_BARREL") ) {
-        int n_elem = a_collection->getNumberOfElements();
-        for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-          EVENT::CalorimeterHit* elem  = dynamic_cast<EVENT::CalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
-          auto a_mcp = lcio2::to_lcio2(elem);
-          EM_BARREL.push_back(a_mcp);
-        }
-      }
-      //"EM_ENDCAP");
-      if( v == std::string("EM_ENDCAP") ) {
-        int n_elem = a_collection->getNumberOfElements();
-        for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-          EVENT::CalorimeterHit* elem  = dynamic_cast<EVENT::CalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
-          auto a_mcp = lcio2::to_lcio2(elem);
-          EM_ENDCAP.push_back(a_mcp);
-        }
-      }
-      //"HAD_BARREL");
-      if( v == std::string("HAD_BARREL") ) {
-        int n_elem = a_collection->getNumberOfElements();
-        for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-          EVENT::CalorimeterHit* elem  = dynamic_cast<EVENT::CalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
-          auto a_mcp = lcio2::to_lcio2(elem);
-          HAD_BARREL.push_back(a_mcp);
-        }
-      }
-      //"HAD_ENDCAP");
-      if( v == std::string("HAD_ENDCAP") ) {
-        int n_elem = a_collection->getNumberOfElements();
-        for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-          EVENT::CalorimeterHit* elem  = dynamic_cast<EVENT::CalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
-          auto a_mcp = lcio2::to_lcio2(elem);
-          HAD_ENDCAP.push_back(a_mcp);
-        }
-      }
-
-      //"PandoraPFOCollection");
-      if( v == std::string("PandoraPFOCollection") ) {
-        int n_elem = a_collection->getNumberOfElements();
-        for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-          EVENT::ReconstructedParticle* elem  = dynamic_cast<EVENT::ReconstructedParticle*>( a_collection->getElementAt( i_elem ) ) ;
-          auto a_mcp = lcio2::to_lcio2(elem);
-          PandoraPFOCollection.push_back(a_mcp);
-        }
-      }
-
-      //"BeamCalHits");
-      if( v == std::string("BeamCalHits") ) {
-        int n_elem = a_collection->getNumberOfElements();
-        for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-          EVENT::SimCalorimeterHit* elem  = dynamic_cast<EVENT::SimCalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
-          auto a_mcp = lcio2::to_lcio2(elem);
-          BeamCalHits.push_back(a_mcp);
-        }
-      }
-
-      ////"VXD_RawTrackerHits");
-      //if( v == std::string("VXD_RawTrackerHits") ) {
+      //if( v == std::string("Tracks") ) {
       //  int n_elem = a_collection->getNumberOfElements();
       //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::TrackerRawData* elem  = dynamic_cast<EVENT::TrackerRawData*>( a_collection->getElementAt( i_elem ) ) ;
+      //    EVENT::Track* elem  = dynamic_cast<EVENT::Track*>( a_collection->getElementAt( i_elem ) ) ;
       //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    VXD_RawTrackerHits.push_back(a_mcp);
+      //    Tracks.push_back(a_mcp);
+      //  }
+      //}
+      ////"ReconClusters");
+      //if( v == std::string("ReconClusters") ) {
+      //  int n_elem = a_collection->getNumberOfElements();
+      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+      //    EVENT::Cluster* elem  = dynamic_cast<EVENT::Cluster*>( a_collection->getElementAt( i_elem ) ) ;
+      //    auto a_mcp = lcio2::to_lcio2(elem);
+      //    ReconClusters.push_back(a_mcp);
+      //  }
+      //}
+      ////"EM_BARREL");
+      //if( v == std::string("EM_BARREL") ) {
+      //  int n_elem = a_collection->getNumberOfElements();
+      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+      //    EVENT::CalorimeterHit* elem  = dynamic_cast<EVENT::CalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
+      //    auto a_mcp = lcio2::to_lcio2(elem);
+      //    EM_BARREL.push_back(a_mcp);
+      //  }
+      //}
+      ////"EM_ENDCAP");
+      //if( v == std::string("EM_ENDCAP") ) {
+      //  int n_elem = a_collection->getNumberOfElements();
+      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+      //    EVENT::CalorimeterHit* elem  = dynamic_cast<EVENT::CalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
+      //    auto a_mcp = lcio2::to_lcio2(elem);
+      //    EM_ENDCAP.push_back(a_mcp);
+      //  }
+      //}
+      ////"HAD_BARREL");
+      //if( v == std::string("HAD_BARREL") ) {
+      //  int n_elem = a_collection->getNumberOfElements();
+      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+      //    EVENT::CalorimeterHit* elem  = dynamic_cast<EVENT::CalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
+      //    auto a_mcp = lcio2::to_lcio2(elem);
+      //    HAD_BARREL.push_back(a_mcp);
+      //  }
+      //}
+      ////"HAD_ENDCAP");
+      //if( v == std::string("HAD_ENDCAP") ) {
+      //  int n_elem = a_collection->getNumberOfElements();
+      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+      //    EVENT::CalorimeterHit* elem  = dynamic_cast<EVENT::CalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
+      //    auto a_mcp = lcio2::to_lcio2(elem);
+      //    HAD_ENDCAP.push_back(a_mcp);
       //  }
       //}
 
-      //"HelicalTrackHits");
-      if( v == std::string("HelicalTrackHits") ) {
-        int n_elem = a_collection->getNumberOfElements();
-        for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-          EVENT::TrackerHit* elem  = dynamic_cast<EVENT::TrackerHit*>( a_collection->getElementAt( i_elem ) ) ;
-          auto a_mcp = lcio2::to_lcio2(elem);
-          HelicalTrackHits.push_back(a_mcp);
-        }
-      }
+      ////"PandoraPFOCollection");
+      //if( v == std::string("PandoraPFOCollection") ) {
+      //  int n_elem = a_collection->getNumberOfElements();
+      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+      //    EVENT::ReconstructedParticle* elem  = dynamic_cast<EVENT::ReconstructedParticle*>( a_collection->getElementAt( i_elem ) ) ;
+      //    auto a_mcp = lcio2::to_lcio2(elem);
+      //    PandoraPFOCollection.push_back(a_mcp);
+      //  }
+      //}
+
+      ////"BeamCalHits");
+      //if( v == std::string("BeamCalHits") ) {
+      //  int n_elem = a_collection->getNumberOfElements();
+      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+      //    EVENT::SimCalorimeterHit* elem  = dynamic_cast<EVENT::SimCalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
+      //    auto a_mcp = lcio2::to_lcio2(elem);
+      //    BeamCalHits.push_back(a_mcp);
+      //  }
+      //}
+
+      //////"VXD_RawTrackerHits");
+      ////if( v == std::string("VXD_RawTrackerHits") ) {
+      ////  int n_elem = a_collection->getNumberOfElements();
+      ////  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+      ////    EVENT::TrackerRawData* elem  = dynamic_cast<EVENT::TrackerRawData*>( a_collection->getElementAt( i_elem ) ) ;
+      ////    auto a_mcp = lcio2::to_lcio2(elem);
+      ////    VXD_RawTrackerHits.push_back(a_mcp);
+      ////  }
+      ////}
+
+      ////"HelicalTrackHits");
+      //if( v == std::string("HelicalTrackHits") ) {
+      //  int n_elem = a_collection->getNumberOfElements();
+      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
+      //    EVENT::TrackerHit* elem  = dynamic_cast<EVENT::TrackerHit*>( a_collection->getElementAt( i_elem ) ) ;
+      //    auto a_mcp = lcio2::to_lcio2(elem);
+      //    HelicalTrackHits.push_back(a_mcp);
+      //  }
+      //}
 
     }
 
