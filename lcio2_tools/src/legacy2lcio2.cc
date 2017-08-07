@@ -258,73 +258,6 @@ int main(int argc,char** argv) {
   IO::LCReader* lcReader = IOIMPL::LCFactory::getInstance()->createLCReader() ;
   lcReader->open( input_file_name ) ;
 
-  //BeamCalHits                   SimCalorimeterHit              695 
-  //CalorimeterHitRelations       LCRelation                     589
-  //EM_BARREL                     CalorimeterHit                   4            
-  //EM_ENDCAP                     CalorimeterHit                 558
-  //HAD_BARREL                    CalorimeterHit                   0
-  //HAD_ENDCAP                    CalorimeterHit                  27
-  //HelicalTrackHitRelations      LCRelation                      47
-  //HelicalTrackHits              TrackerHit                      34
-  //HelicalTrackMCRelations       LCRelation                      34
-  //LumiCalHits                   SimCalorimeterHit               34
-  //MCInfo                        LCGenericObject                  1
-  //MCParameters                  LCGenericObject                  1
-  //MCParticle                    MCParticle                      43
-  //MUON_BARREL                   CalorimeterHit                   0
-  //MUON_ENDCAP                   CalorimeterHit                   0
-  //MuonBarrelHits                SimCalorimeterHit                0
-  //MuonEndcapHits                SimCalorimeterHit                0
-  //PandoraPFOCollection          ReconstructedParticle            6
-  //ReconClusters                 Cluster                          6
-  //SiTrackerBarrelHits           SimTrackerHit                   24
-  //SiTrackerEndcapHits           SimTrackerHit                   45
-  //SiTrackerForwardHits          SimTrackerHit                    5
-  //SiVertexBarrelHits            SimTrackerHit                    2
-  //SiVertexEndcapHits            SimTrackerHit                    7
-  //StateAtECal                   LCGenericObject                  1
-  //StateAtEnd                    LCGenericObject                  1
-  //StateAtStart                  LCGenericObject                  1
-  //TKR_RawTrackerHits            TrackerRawData                  89
-  //TKR_TrackerHits               TrackerHit                      40
-  //Tracks                        Track                            1
-  //VXD_RawTrackerHits            TrackerRawData                  26
-  //VXD_TrackerHits               TrackerHit                      14
-  //---------------------------------------------------------------------------
-
-  //auto& mcps = store.create<lcio2::MCParticleCollection>("MCParticle");
-  //auto& SiTrackerBarrelHits = store.create<lcio2::SimTrackerHitCollection>("SiTrackerBarrelHits");
-  //auto& SiTrackerEndcapHits = store.create<lcio2::SimTrackerHitCollection>("SiTrackerEndcapHits");
-  //auto& SiTrackerForwardHits = store.create<lcio2::SimTrackerHitCollection>("SiTrackerForwardHits");
-  //auto& SiVertexBarrelHits  = store.create<lcio2::SimTrackerHitCollection>("SiVertexBarrelHits");
-  //auto& SiVertexEndcapHits  = store.create<lcio2::SimTrackerHitCollection>("SiVertexEndcapHits");
-  //auto& Tracks = store.create<lcio2::TrackCollection>("Tracks");
-  //auto& ReconClusters = store.create<lcio2::ClusterCollection>("ReconClusters");
-  //auto& EM_BARREL = store.create<lcio2::CalorimeterHitCollection>("EM_BARREL");
-  //auto& EM_ENDCAP = store.create<lcio2::CalorimeterHitCollection>("EM_ENDCAP");
-  //auto& HAD_BARREL = store.create<lcio2::CalorimeterHitCollection>("HAD_BARREL");
-  //auto& HAD_ENDCAP = store.create<lcio2::CalorimeterHitCollection>("HAD_ENDCAP");
-  //auto& PandoraPFOCollection = store.create<lcio2::ReconstructedParticleCollection>("PandoraPFOCollection");
-  //auto& BeamCalHits = store.create<lcio2::SimCalorimeterHitCollection>("BeamCalHits");
-  ////auto& VXD_RawTrackerHits = store.create<lcio2::TrackerRawDataCollection>("VXD_RawTrackerHits");
-  //auto& HelicalTrackHits = store.create<lcio2::TrackerHitCollection>("HelicalTrackHits");
-
-  //writer.registerForWrite("MCParticle");
-  //writer.registerForWrite("SiTrackerBarrelHits");
-  //writer.registerForWrite("SiTrackerEndcapHits");
-  //writer.registerForWrite("SiTrackerForwardHits");
-  //writer.registerForWrite("SiVertexBarrelHits");
-  //writer.registerForWrite("SiVertexEndcapHits");
-  //writer.registerForWrite("Tracks");
-  //writer.registerForWrite("ReconClusters");
-  //writer.registerForWrite("EM_BARREL");
-  //writer.registerForWrite("EM_ENDCAP");
-  //writer.registerForWrite("HAD_BARREL");
-  //writer.registerForWrite("HAD_ENDCAP");
-  //writer.registerForWrite("PandoraPFOCollection");
-  //writer.registerForWrite("BeamCalHits");
-  ////writer.registerForWrite("VXD_RawTrackerHits");
-  //writer.registerForWrite("HelicalTrackHits");
 
   // -----------------------------------------------
   // Get the first event to build collections
@@ -340,13 +273,6 @@ int main(int argc,char** argv) {
   auto Track_map                 = build_collection_map<EVENT::Track, lcio2::TrackCollection>(evt, store, writer);
   auto Cluster_map               = build_collection_map<EVENT::Cluster, lcio2::ClusterCollection>(evt, store, writer);
   auto ReconstructedParticle_map = build_collection_map<EVENT::ReconstructedParticle, lcio2::ReconstructedParticleCollection>(evt, store, writer);
-
-  //auto collections  = evt->getCollectionNames();
-  //for(const auto& v : (*collections) ) {
-  //  auto a_collection = evt->getCollection(v);
-  //  auto cols_map = build_collection_map(evt, store, a_collection->getTypeName());
-  //}
-
 
   // close and open so the first event is read again
   lcReader->close();
@@ -364,14 +290,13 @@ int main(int argc,char** argv) {
       UTIL::LCTOOLS::dumpEvent( evt ) ;
     }
 
-
     run_number   = evt->getRunNumber();
     event_number = evt->getEventNumber();
     auto collections  = evt->getCollectionNames();
 
     for(const auto& v : (*collections) ) {
 
-      auto a_collection = evt->getCollection(v);
+      //auto a_collection = evt->getCollection(v);
 
       fill_collections( evt, v, mcp_map, vrb );
       fill_collections( evt, v, SimTrackerHit_map, vrb );
@@ -382,190 +307,16 @@ int main(int argc,char** argv) {
       fill_collections( evt, v, Cluster_map              , vrb );
       fill_collections( evt, v, ReconstructedParticle_map, vrb );
 
-      //if( mcp_map.count(v) > 0 ){
-      //  auto a_col = mcp_map.at(v);
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    auto elem  = dynamic_cast<EVENT::MCParticle*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    a_col->push_back(a_mcp);
-      //  }
-      //  if( vrb ){
-      //    std::cout << "MCPs  : " << a_col->size()  << std::endl;
-      //  }
-      //}
-
-      // -----------------------------------------------------------
-      // MCParticle
-      //if( a_collection->getTypeName() == std::string("MCParticle") ) {
-      //  std::cout << a_collection << "  ->  " 
-      //  //<< typeid(mcp_map[a_collection]).name() 
-      //    << std::endl;
-
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::MCParticle* elem  = dynamic_cast<EVENT::MCParticle*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    mcps.push_back(a_mcp);
-      //  }
-      //}
-
-      //// SiTrackerBarrelHits
-      //if( v == std::string("SiTrackerBarrelHits") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::SimTrackerHit* elem  = dynamic_cast<EVENT::SimTrackerHit*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    SiTrackerBarrelHits.push_back(a_mcp);
-      //  }
-      //}
-      //// SiTrackerEndcapHits
-      //if( v == std::string("SiTrackerEndcapHits") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::SimTrackerHit* elem  = dynamic_cast<EVENT::SimTrackerHit*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    SiTrackerEndcapHits.push_back(a_mcp);
-      //  }
-      //}
-      //// SiTrackerForwardHits
-      //if( v == std::string("SiTrackerForwardHits") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::SimTrackerHit* elem  = dynamic_cast<EVENT::SimTrackerHit*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    SiTrackerForwardHits.push_back(a_mcp);
-      //  }
-      //}
-      //// SiVertexBarrelHits
-      //if( v == std::string("SiVertexBarrelHits") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::SimTrackerHit* elem  = dynamic_cast<EVENT::SimTrackerHit*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    SiVertexBarrelHits.push_back(a_mcp);
-      //  }
-      //}
-      //// SiVertexEndcapHits
-      //if( v == std::string("SiVertexEndcapHits") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::SimTrackerHit* elem  = dynamic_cast<EVENT::SimTrackerHit*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    SiVertexEndcapHits.push_back(a_mcp);
-      //  }
-      //}
-
-      //"Tracks"
-      //if( v == std::string("Tracks") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::Track* elem  = dynamic_cast<EVENT::Track*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    Tracks.push_back(a_mcp);
-      //  }
-      //}
-      ////"ReconClusters");
-      //if( v == std::string("ReconClusters") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::Cluster* elem  = dynamic_cast<EVENT::Cluster*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    ReconClusters.push_back(a_mcp);
-      //  }
-      //}
-      ////"EM_BARREL");
-      //if( v == std::string("EM_BARREL") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::CalorimeterHit* elem  = dynamic_cast<EVENT::CalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    EM_BARREL.push_back(a_mcp);
-      //  }
-      //}
-      ////"EM_ENDCAP");
-      //if( v == std::string("EM_ENDCAP") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::CalorimeterHit* elem  = dynamic_cast<EVENT::CalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    EM_ENDCAP.push_back(a_mcp);
-      //  }
-      //}
-      ////"HAD_BARREL");
-      //if( v == std::string("HAD_BARREL") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::CalorimeterHit* elem  = dynamic_cast<EVENT::CalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    HAD_BARREL.push_back(a_mcp);
-      //  }
-      //}
-      ////"HAD_ENDCAP");
-      //if( v == std::string("HAD_ENDCAP") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::CalorimeterHit* elem  = dynamic_cast<EVENT::CalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    HAD_ENDCAP.push_back(a_mcp);
-      //  }
-      //}
-
-      ////"PandoraPFOCollection");
-      //if( v == std::string("PandoraPFOCollection") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::ReconstructedParticle* elem  = dynamic_cast<EVENT::ReconstructedParticle*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    PandoraPFOCollection.push_back(a_mcp);
-      //  }
-      //}
-
-      ////"BeamCalHits");
-      //if( v == std::string("BeamCalHits") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::SimCalorimeterHit* elem  = dynamic_cast<EVENT::SimCalorimeterHit*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    BeamCalHits.push_back(a_mcp);
-      //  }
-      //}
-
-      //////"VXD_RawTrackerHits");
-      ////if( v == std::string("VXD_RawTrackerHits") ) {
-      ////  int n_elem = a_collection->getNumberOfElements();
-      ////  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      ////    EVENT::TrackerRawData* elem  = dynamic_cast<EVENT::TrackerRawData*>( a_collection->getElementAt( i_elem ) ) ;
-      ////    auto a_mcp = lcio2::to_lcio2(elem);
-      ////    VXD_RawTrackerHits.push_back(a_mcp);
-      ////  }
-      ////}
-
-      ////"HelicalTrackHits");
-      //if( v == std::string("HelicalTrackHits") ) {
-      //  int n_elem = a_collection->getNumberOfElements();
-      //  for(int i_elem = 0; i_elem<n_elem; i_elem++) {
-      //    EVENT::TrackerHit* elem  = dynamic_cast<EVENT::TrackerHit*>( a_collection->getElementAt( i_elem ) ) ;
-      //    auto a_mcp = lcio2::to_lcio2(elem);
-      //    HelicalTrackHits.push_back(a_mcp);
-      //  }
-      //}
 
     }
 
     nEvents ++ ;
 
-    //treeEvt = (IMPL::LCEventImpl*) evt ;
-
-    //tree->Fill() ;
     writer.writeEvent();
     store.clearCollections();
   }
   // -------- end of event loop -----------
 
-  //file->Write() ;
-  //file->Close() ;
-  //delete file ;
 
   std::cout << std::endl 
     <<  "  " <<  nEvents 
@@ -575,22 +326,6 @@ int main(int argc,char** argv) {
   lcReader->close() ;
   delete lcReader ;
 
-
-  //// unsigned nEvents = 5;
-  //unsigned nEvents = reader.getEntries();
-  //for(unsigned i=0; i<nEvents; ++i) {
-  //  if(i%1000==0) {
-  //    std::cout<<"reading event "<<i<<std::endl;
-  //  }
-  //  if(i>10) {
-  //    verbose = false;
-  //  }
-  //  processEvent(store, verbose, reader);
-  //  store.clear();
-  //  reader.endOfEvent();
-  //}
-  //
-  //writeEventTree(store, 0, writer);
   writer.finish();
 
   return 0;
