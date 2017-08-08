@@ -70,7 +70,7 @@ namespace podio {
       std::cerr<<"no such collection to write, throw exception."<<std::endl;
     }
     else {
-      std::cout << " NAME " << collClassName.c_str()  << std::endl;
+      //std::cout << " NAME " << collClassName.c_str()  << std::endl;
       //std::cout << typeid(coll->getBufferAddress()).name() << std::endl;
       //std::cout << typeid(coll).name() << std::endl;
       //m_datatree->Branch(name.c_str(),  collClassName.c_str(), coll->getBufferAddress(), 32000, 199);

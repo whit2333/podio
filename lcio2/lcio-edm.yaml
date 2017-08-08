@@ -62,11 +62,10 @@ datatypes :
     Members :
       - int runNumber // Event number
       - std::string detectorName // detector name
-        #    OneToOneRelations:
-        #      - lcio2::StringParameter sParameters // string parameters
-        #      - lcio2::IntParameter    iParameters // int parameters
-        #      - lcio2::DoubleParameter dParameters // double parameters
-        #      #- std::vector<string> info // arbitrary info
+    OneToOneRelations:
+      - lcio2::StringParameter sParameters // string parameters
+      - lcio2::IntParameter    iParameters // int parameters
+      - lcio2::DoubleParameter dParameters // double parameters
 
   lcio2::Particle :
     Description : "Naive Particle Type, used for reconstructed and generated particles"
