@@ -1,6 +1,7 @@
 #ifndef ${name}DATA_H
 #define ${name}DATA_H
 
+#include "Rtypes.h"
 $includes
 
 ${namespace_open}
@@ -12,6 +13,7 @@ ${namespace_open}
 class ${name}Data {
 public:
 $members
+ClassDef(${name}Data,1);
 };
 ${namespace_close}
 

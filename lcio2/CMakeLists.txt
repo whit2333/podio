@@ -114,18 +114,20 @@ include_directories(
 file(GLOB sources ${CMAKE_BINARY_DIR}/src/*.cc)
 file(GLOB headers ${CMAKE_BINARY_DIR}/lcio/*.h podio/PythonEventStore.h)
 
-add_library(lcio2 SHARED ${sources} ${headers})
-target_link_libraries(lcio2 podio)
+#REFLEX_GENERATE_DICTIONARY(lcio2 ${headers} SELECTION ${CMAKE_BINARY_DIR}/src/selection.xml )
+ROOT_GENERATE_DICTIONARY(lcio2dict ${headers} LINKDEF ${CMAKE_BINARY_DIR}/LinkDef.h OPTIONS -p)
 
-REFLEX_GENERATE_DICTIONARY(lcio2 ${headers} SELECTION ${CMAKE_BINARY_DIR}/src/selection.xml )
-add_library(lcio2Dict SHARED lcio2.cxx)
-add_dependencies(lcio2Dict lcio2-dictgen)
-target_link_libraries(lcio2Dict lcio2 podio ${ROOT_LIBRARIES})
+add_library(lcio2 SHARED ${sources} lcio2dict.cxx ${headers})
+target_link_libraries(lcio2 podio ${ROOT_LIBRARIES})
+add_dependencies(lcio2 lcio2dict)
+
+#add_library(lcio2Dict SHARED lcio2.cxx)
+#target_link_libraries(lcio2Dict)
 
 set_target_properties(lcio2 PROPERTIES
   PUBLIC_HEADER "${headers}")
 
-install(TARGETS lcio2 lcio2Dict
+install(TARGETS lcio2
   # IMPORTANT: Add the datamodel library to the "export-set"
   #EXPORT fccedmTargets
   RUNTIME DESTINATION "${INSTALL_BIN_DIR}" COMPONENT bin
@@ -134,12 +136,12 @@ install(TARGETS lcio2 lcio2Dict
   COMPONENT dev)
 
 install(FILES
-  "${PROJECT_BINARY_DIR}/lcio2Dict.rootmap"
+  "${PROJECT_BINARY_DIR}/liblcio2dict.rootmap"
   DESTINATION "${INSTALL_LIB_DIR}" COMPONENT dev)
 
 if (${ROOT_VERSION} GREATER 6)
   install(FILES
-      "${PROJECT_BINARY_DIR}/lcio2_rdict.pcm"
+      "${PROJECT_BINARY_DIR}/liblcio2dict_rdict.pcm"
       DESTINATION "${INSTALL_LIB_DIR}" COMPONENT dev)
 endif()
 

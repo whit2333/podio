@@ -88,7 +88,11 @@ class ClassGenerator(object):
 
     def create_selection_xml(self):
         content = ""
+        linkdef_content = ""
         for klass in self.created_classes:
+
+            linkdef_content += '#pragma link C++ class %s+;\n' % klass
+            linkdef_content += '#pragma link C++ class std::vector<%s>+;\n' % klass
             # if not klass.endswith("Collection") or klass.endswith("Data"):
             content += '    <class name="std::vector<%s>" />\n' % klass
             content += """    <class name="%s">
@@ -101,6 +105,12 @@ class ClassGenerator(object):
         template = open(templatefile, "r").read()
         content = string.Template(template).substitute({"classes": content})
         self.write_file("selection.xml", content)
+
+        linkdeftemplatefile = os.path.join(self.template_dir,
+                                    "linkdef.h.template")
+        linkdeftemplate = open(linkdeftemplatefile, "r").read()
+        linkdefcontent = string.Template(linkdeftemplate).substitute({"classes": linkdef_content})
+        self.write_file("../LinkDef.h", linkdefcontent)
 
     def process_datatype(self, classname, definition, is_data=False):
         datatype_dict = {}

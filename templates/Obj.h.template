@@ -3,6 +3,7 @@
 
 // ROOT 
 #include "Math/Vector3D.h"
+#include "Rtypes.h"
 
 // std includes
 #include <atomic>
@@ -36,6 +37,7 @@ public:
   ${name}Data data;
 ${relations}
 
+  ClassDef(${name}Obj,1);
 };
 ${namespace_close}
 

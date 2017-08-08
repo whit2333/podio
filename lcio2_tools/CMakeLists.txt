@@ -99,7 +99,7 @@ file(GLOB sources src/lcio2utils.cc )
 file(GLOB headers include/lcio2utils.h )
 
 add_library(lcio2util SHARED ${sources} ${headers})
-target_link_libraries(lcio2util lcio2 lcio2Dict podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
+target_link_libraries(lcio2util lcio2 podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
 set_target_properties(lcio2util PROPERTIES PUBLIC_HEADER "${headers}")
 
 #REFLEX_GENERATE_DICTIONARY(lcio2 ${headers} SELECTION ${CMAKE_BINARY_DIR}/src/selection.xml )
@@ -131,16 +131,16 @@ install(TARGETS lcio2util
 # --------------------------------------------------------------------------
 
 add_executable(legacy2lcio2 src/legacy2lcio2.cc)
-target_link_libraries(legacy2lcio2 lcio2util lcio2 lcio2Dict podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
+target_link_libraries(legacy2lcio2 lcio2util lcio2 podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
 add_dependencies(legacy2lcio2 lcio2util)
 
 add_executable(lcio2legacy src/lcio2legacy.cc)
-target_link_libraries(lcio2legacy lcio2util lcio2 lcio2Dict podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
+target_link_libraries(lcio2legacy lcio2util lcio2 podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
 add_dependencies(lcio2legacy lcio2util)
 
 
 add_executable(lcio2-edm-read src/read.cc)
-target_link_libraries(lcio2-edm-read lcio2util lcio2 lcio2Dict podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
+target_link_libraries(lcio2-edm-read lcio2util lcio2 podio ${ROOT_LIBRARIES} ${LCIO_LIBRARIES})
 add_dependencies(lcio2-edm-read lcio2util)
 
 install(TARGETS lcio2-edm-read legacy2lcio2 lcio2legacy
