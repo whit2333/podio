@@ -18,7 +18,6 @@ components :
       SimpleStruct() : x(0),y(0),z(0) {}
       SimpleStruct( const int* v) : x(v[0]),y(v[1]),z(v[2]) {}
       "
-
   lcio2::LorentzVector:
     Mass : float
     Pt : float
@@ -29,28 +28,53 @@ components :
 datatypes :
 # Datatypes are components that can be stored in a Collection
 
+  lcio2::StringParameter :
+    Description : "string named Parameter"
+    Author : "Whit Armstrong"
+    Members :
+      - std::string parameter // name
+      - std::string value // value
+  
+  lcio2::IntParameter :
+    Description : "int named Parameter"
+    Author : "Whit Armstrong"
+    Members :
+      - std::string parameter // name
+      - int value // value
+  
+  lcio2::DoubleParameter :
+    Description : "double named Parameter"
+    Author : "Whit Armstrong"
+    Members :
+      - std::string parameter // name
+      - double value // value
+
   lcio2::EventInfo :
     Description : "Event Data"
     Author : "Whit Armstrong"
     Members :
-     - int eventNumber // Event number
-     - int runNumber   // Event number
-   
+      - int eventNumber // Event number
+      - int runNumber   // Event number
 
   lcio2::RunInfo :
     Description : "Run Data"
     Author : "Whit Armstrong"
     Members :
-     - int runNumber // Event number
-       #- std::vector<string> info // arbitrary info
+      - int runNumber // Event number
+      - std::string detectorName // detector name
+        #    OneToOneRelations:
+        #      - lcio2::StringParameter sParameters // string parameters
+        #      - lcio2::IntParameter    iParameters // int parameters
+        #      - lcio2::DoubleParameter dParameters // double parameters
+        #      #- std::vector<string> info // arbitrary info
 
   lcio2::Particle :
     Description : "Naive Particle Type, used for reconstructed and generated particles"
     Author : "C. Bernet, B. Hegner"
     Members :
-     - lcio2::LorentzVector P4 // Four momentum.
-     - int ID // Particle type identification code
-     - int Status // Status code
+      - lcio2::LorentzVector P4 // Four momentum.
+      - int ID // Particle type identification code
+      - int Status // Status code
 
 
 # LCIO test Description

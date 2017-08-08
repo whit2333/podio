@@ -7,17 +7,10 @@ set(LCIO2TOOLS_PATCH_VERSION 1)
 set(LCIO2TOOLS_VERSION
   ${LCIO2TOOLS_MAJOR_VERSION}.${LCIO2TOOLS_MINOR_VERSION})
 
-#execute_process(COMMAND podio ${CMAKE_SOURCE_DIR}/lcio-edm.yaml ${PROJECT_BINARY_DIR} lcio )
-
-#--- Declare options -----------------------------------------------------------
-#option(CREATE_DOC "Whether or not to create doxygen doc target.")
-
 # Offer the user the choice of overriding the installation directories
 set(INSTALL_LIB_DIR lib CACHE PATH "Installation directory for libraries")
 set(INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
-set(INSTALL_INCLUDE_DIR include CACHE PATH
-  "Installation directory for header files")
-
+set(INSTALL_INCLUDE_DIR include CACHE PATH "Installation directory for header files")
 
 if(APPLE)
   set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
@@ -44,13 +37,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -DDROP_CGAL ${CPP_STANDARD_FLAGS} 
 
 find_package(LCIO REQUIRED)
 
-# Make sure we find the Find*.cmake functions distributed with this package
-#set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(LCIO2 REQUIRED)
 message(STATUS "Found LCIO2: ${LCIO2_DIR}")
-# Make sure the library is found.
-# Not the case if LD_LIBRARY_PATH is wrong
-#find_library(LCIO2LIB lcio2)
 
 link_directories(${podio_LIBRARY_DIR})
 # Make sure we find the Find*.cmake functions distributed with this package

@@ -112,6 +112,8 @@ class ClassGenerator(object):
         for member in members:
             klass = member["type"]
             namespace, rawclassname, namespace_open, namespace_close = self.demangle_classname(klass)
+            if klass.startswith("std::string"):
+              rawclassname = "std::" + rawclassname
             if klass.startswith("std::array"):
               rawclassname = "std::" + rawclassname
             if klass.startswith("std::vector"):
@@ -136,6 +138,8 @@ class ClassGenerator(object):
                 else:
                     datatype_dict["includes"].append('#include "%s.h"'
                                                      % klass)
+            elif "std::string" in klass:
+                datatype_dict["includes"].append("#include <string>")
             elif "std::array" in klass:
                 datatype_dict["includes"].append("#include <array>")
                 if is_data:  # avoid having warnings twice
@@ -270,6 +274,8 @@ class ClassGenerator(object):
             datatype["includes"].append('#include "%s.h"' %klassname)
           else:
             datatype["includes"].append('#include "%s.h"' %klass)
+        elif "std::string" in klass:
+            datatype["includes"].append("#include <string>")
         elif "std::array" in klass:
           datatype["includes"].append("#include <array>")
         elif "std::vector" in klass:
@@ -288,7 +294,7 @@ class ClassGenerator(object):
         gname,sname = name,name
         mnamespace2 = ""
         klassname2 = klass
-        if "::" in klass and not klass.startswith("std::array") and not klass.startswith("std::vector") and not klass.startswith("std::map"):
+        if "::" in klass and not klass.startswith("std::string") and not klass.startswith("std::array") and not klass.startswith("std::vector") and not klass.startswith("std::map"):
           mnamespace2, klassname2 = klass.split("::")
 
         if( self.getSyntax ):
@@ -376,7 +382,7 @@ class ClassGenerator(object):
         ConstGetter_implementations += implementations["const_member_getter"].format(type=klass, classname=rawclassname, name=name, fname=gname, description=desc)
 
         #print rawclassname
-        if "::" in klass and (not klass.startswith("std::array") and not klass.startswith("std::vector") and not klass.startswith("std::map")):
+        if "::" in klass and (not klass.startswith("std::string") and not klass.startswith("std::array") and not klass.startswith("std::vector") and not klass.startswith("std::map")):
         #  rawclassname = "std::" + rawclassname
           nameA, nameB = klass.split("::")
         else:
@@ -856,6 +862,8 @@ class ClassGenerator(object):
               includes.append('#include "%s.h"\n' %(klassname))
           if "std::array" in klass:
               includes.append("#include <array>\n")
+          if "std::string" in klass:
+              includes.append("#include <string>\n")
           if "std::vector" in klass:
               includes.append("#include <vector>\n")
           if "std::map" in klass:
@@ -995,6 +1003,8 @@ class ClassGenerator(object):
         klass = member["type"]
         namespace, rawclassname, namespace_open, namespace_close = self.demangle_classname(klass)
         if klass.startswith("std::array"):
+          rawclassname = "std::" + rawclassname
+        if klass.startswith("std::string"):
           rawclassname = "std::" + rawclassname
         if klass.startswith("std::vector"):
           rawclassname = "std::" + rawclassname
