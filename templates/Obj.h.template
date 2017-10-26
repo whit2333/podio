@@ -3,9 +3,11 @@
 
 // ROOT 
 #include "Math/Vector3D.h"
+#include "Math/Vector4D.h"
 #include "Rtypes.h"
 
 // std includes
+#include <cmath>
 #include <atomic>
 #include <iostream>
 

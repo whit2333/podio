@@ -125,6 +125,8 @@ public:
   /// returns the pointer to the data buffer
   std::vector<${name}Data>* _getBuffer() { return m_data;};
 
+  const std::vector<${name}Data>& getDataVector() const { return *m_data; }
+
    ${vectorized_access_declaration}
 
 private:

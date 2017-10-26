@@ -62,13 +62,13 @@ datatypes :
     members:
       - int pdg // The PDG code of the particle.
       - int genstatus   // The status for particles as defined by the generator.
-      - float[3] vertex // The production vertex of the particle in [mm].
+      - double[3] vertex // The production vertex of the particle in [mm].
       - float charge // The particle's charge.
-      - float mass // The mass of the particle in [GeV]
+      - double mass // The mass of the particle in [GeV]
       - float time // The creation time of the particle in [ns] wrt. the event, e.g. for preassigned decays or decays in flight from the simulator.
-      - float[3] endpoint // The endpoint of the particle in [mm]
+      - double[3] endpoint // The endpoint of the particle in [mm]
       - bool endpointSet  // Whether the endpoint has been set
-      - float[3] momentum // The particle's 3-momentum at the production vertex in [GeV]
+      - double[3] momentum // The particle's 3-momentum at the production vertex in [GeV]
     OneToManyRelations:
       - MCParticle parents // The parents of this particle.
       - MCParticle daughters // The daughters this particle.
@@ -79,10 +79,10 @@ datatypes :
     author : "F.Gaede, B. Hegner"
     members:
       - int type     // Type of reconstructed particle.
-      - float energy // Energy of the reconstructed particle.
-      - float[3] momentum // The reconstructed particle's 3-momentum
+      - double energy // Energy of the reconstructed particle.
+      - double[3] momentum // The reconstructed particle's 3-momentum
       - float charge // The particle's charge
-      - float mass   // The mass of the particle in [GeV]
+      - double mass   // The mass of the particle in [GeV]
     OneToOneRelations:
       - Vertex vertex // The start vertex associated to this particle.
     OneToManyRelations:
@@ -105,9 +105,9 @@ datatypes :
     members:
       - int cellID0  // The detector specific (geometrical) cell id.
       - int cellID1  // The second detector specific (geometrical) cell id.
-      - float energy // The energy of the hit in [GeV].
+      - double energy // The energy of the hit in [GeV].
       - float time   // The time of the hit in [ns].
-      - float[3] position // The position of the hit in world coordinates.
+      - double[3] position // The position of the hit in world coordinates.
 
   # LCIO SimTrackerHit
   SimTrackerHit:

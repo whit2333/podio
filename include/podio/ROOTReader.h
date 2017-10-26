@@ -75,6 +75,7 @@ class ROOTReader : public IReader {
     TFile* m_file;
     TTree* m_eventTree;
     unsigned m_eventNumber;
+
 };
 
 template<typename T>

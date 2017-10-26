@@ -62,6 +62,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(ROOT REQUIRED COMPONENTS RIO Tree Physics)
 include_directories(${ROOT_INCLUDE_DIR})
 include(${ROOT_USE_FILE})
+## extra root settings
+#include(cmake/root.cmake)
 
 #find_package(dag REQUIRED HINTS $ENV{FCCDAG})
 #if(${DAG_FOUND})
@@ -115,11 +117,13 @@ file(GLOB sources ${CMAKE_BINARY_DIR}/src/*.cc)
 file(GLOB headers ${CMAKE_BINARY_DIR}/lcio/*.h podio/PythonEventStore.h)
 
 #REFLEX_GENERATE_DICTIONARY(lcio2 ${headers} SELECTION ${CMAKE_BINARY_DIR}/src/selection.xml )
-ROOT_GENERATE_DICTIONARY(lcio2dict ${headers} LINKDEF ${CMAKE_BINARY_DIR}/LinkDef.h OPTIONS -p)
+ROOT_GENERATE_DICTIONARY(lcio2Dict ${headers} LINKDEF ${CMAKE_BINARY_DIR}/LinkDef.h MODULE lcio2)# OPTIONS -p)
 
-add_library(lcio2 SHARED ${sources} lcio2dict.cxx ${headers})
+ADD_CUSTOM_TARGET(lcio2_ROOTDICTS DEPENDS ${sources} ${headers} lcio2Dict.cxx)
+
+add_library(lcio2 SHARED ${sources} lcio2Dict.cxx)
 target_link_libraries(lcio2 podio ${ROOT_LIBRARIES})
-add_dependencies(lcio2 lcio2dict)
+add_dependencies(lcio2 lcio2_ROOTDICTS)
 
 #add_library(lcio2Dict SHARED lcio2.cxx)
 #target_link_libraries(lcio2Dict)
@@ -136,12 +140,12 @@ install(TARGETS lcio2
   COMPONENT dev)
 
 install(FILES
-  "${PROJECT_BINARY_DIR}/liblcio2dict.rootmap"
+  "${PROJECT_BINARY_DIR}/liblcio2.rootmap"
   DESTINATION "${INSTALL_LIB_DIR}" COMPONENT dev)
 
 if (${ROOT_VERSION} GREATER 6)
   install(FILES
-      "${PROJECT_BINARY_DIR}/liblcio2dict_rdict.pcm"
+      "${PROJECT_BINARY_DIR}/liblcio2_rdict.pcm"
       DESTINATION "${INSTALL_LIB_DIR}" COMPONENT dev)
 endif()
 
@@ -176,5 +180,3 @@ install(FILES
   DESTINATION lib/lcio2)
 #
 ## Install the export set for use with the install-tree
-#install(EXPORT LCIO2Targets DESTINATION
-#  "${INSTALL_CMAKE_DIR}" COMPONENT dev)
