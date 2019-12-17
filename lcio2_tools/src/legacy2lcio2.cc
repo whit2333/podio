@@ -85,6 +85,8 @@
 #include "podio/ROOTReader.h"
 #include "podio/ROOTWriter.h"
 
+using EVENT::LCEvent;
+
 template<class T1, class T2>
 std::map<std::string, T2*>  build_collection_map(LCEvent* evt, podio::EventStore& store, podio::ROOTWriter& writer)
 {

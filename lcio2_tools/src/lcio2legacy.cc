@@ -32,6 +32,8 @@
 #include "lcio.h"
 #include "IO/LCWriter.h"
 #include "IO/LCReader.h"
+#include "IOIMPL/LCFactory.h"
+#include "IOIMPL/LCRunHeaderIOImpl.h"
 
 #include "UTIL/LCTOOLS.h"
 #include "UTIL/Operators.h"
@@ -41,6 +43,7 @@
 #include "UTIL/PIDHandler.h"
 #include "UTIL/BitSet32.h"
 #include "LCIOSTLTypes.h"
+#include "UTIL/LCIOTypeInfo.h"
 
 #include "IMPL/LCEventImpl.h" 
 #include "IMPL/LCRunHeaderImpl.h" 
@@ -86,6 +89,14 @@
 #include "podio/EventStore.h"
 #include "podio/ROOTReader.h"
 #include "podio/ROOTWriter.h"
+using EVENT::LCEvent;
+using IMPL::LCCollectionVec;
+using IMPL::LCEventImpl;
+using namespace IO;
+using namespace IOIMPL;
+using namespace IMPL;
+using namespace EVENT;
+using namespace UTIL;
 
 template<class T>
 void add_collection_data(const T& c, LCCollectionVec* legacy){
