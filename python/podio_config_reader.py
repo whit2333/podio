@@ -28,7 +28,7 @@ class ClassDefinitionValidator(object):
     array_re = re.compile(' *std::array *<([a-z]+) *, *([0-9]+)> *')
 
 
-    buildin_types = ["int", "long", "float", "double",
+    buildin_types = ["uint32_t", "uint64_t","int32_t", "int64_t", "int", "long", "float", "double",
                      "unsigned int", "unsigned", "unsigned long",
                      "short", "bool", "long long",
                      "unsigned long long", "std::string"]

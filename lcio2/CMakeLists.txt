@@ -37,10 +37,10 @@ foreach(p LIB BIN INCLUDE CMAKE)
 endforeach()
 
 # Set up C++14
-set(CPP_STANDARD_FLAGS "-std=c++14")
-if (${APPLE})
-    set(CPP_STANDARD_FLAGS "-std=c++14\ -stdlib=libc++")
-endif()
+##set(CPP_STANDARD_FLAGS "-std=c++17")
+#if (${APPLE})
+#    set(CPP_STANDARD_FLAGS "-std=c++14\ -stdlib=libc++")
+#endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -DDROP_CGAL ${CPP_STANDARD_FLAGS} -Wall -Wextra -Wpedantic -Wno-unused-variable -Wno-unused-parameter")
 
 

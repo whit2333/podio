@@ -185,8 +185,8 @@ datatypes :
     Description: "LCIO simulated calorimeter hit"
     Author : "F.Gaede, B. Hegner"
     Members:
-      - int cellID0  // The detector specific (geometrical) cell id.
-      - int cellID1  // The second detector specific (geometrical) cell id.
+      - int64_t cellID0  // The detector specific (geometrical) cell id.
+      - int64_t cellID1  // The second detector specific (geometrical) cell id.
       - float energy // The energy of the hit in [GeV].
       - float time   // The time of the hit in [ns].
       - std::array<float, 3> position // The position of the hit in world coordinates.
@@ -196,8 +196,8 @@ datatypes :
     Description: "LCIO simulated tracker hit"
     Author : "F.Gaede, B. Hegner"
     Members:
-      - int cellID0  // The detector specific (geometrical) cell id.
-      - int cellID1  // The second detector specific (geometrical) cell id.
+      - int64_t cellID0  // The detector specific (geometrical) cell id.
+      - int64_t cellID1  // The second detector specific (geometrical) cell id.
       - std::array<double, 3> position // The position of the hit in world coordinates.
       - float time   // The time of the hit in [ns].
       - float pathLength // path length
@@ -229,8 +229,8 @@ datatypes :
     Description : "LCIO tracker data"
     Author : "F.Gaede, B. Hegner"
     Members:
-      - int cellID0 // The detector specific (geometrical) cell id.
-      - int cellID1 // The second detector specific (geometrical) cell id.
+      - int64_t cellID0 // The detector specific (geometrical) cell id.
+      - int64_t cellID1 // The second detector specific (geometrical) cell id.
       - int time    // The time of the hit.
 #      - std::vector<float> charge // The corrected (calibrated) FADC spectrum.
 
@@ -240,8 +240,8 @@ datatypes :
     Description : "LCIO tracker hit"
     Author : "F.Gaede, B. Hegner"
     Members :
-      - int cellID0 // The detector specific (geometrical) cell id.
-      - int cellID1 // The second detector specific (geometrical) cell id.
+      - int64_t cellID0 // The detector specific (geometrical) cell id.
+      - int64_t cellID1 // The second detector specific (geometrical) cell id.
       - int time    // The time of the hit.
       - float EDep  // EDep
       - float EDepError // error on EDep
@@ -258,8 +258,8 @@ datatypes :
     Description : "LCIO tracker pulse"
     Author : "F. Gaede, B. Hegner"
     Members:
-      - int cellID0  // The detector specific (geometrical) cell id.
-      - int cellID1  // The second detector specific (geometrical) cell id.
+      - int64_t cellID0  // The detector specific (geometrical) cell id.
+      - int64_t cellID1  // The second detector specific (geometrical) cell id.
       - int quality  // ...
       - float time   // The time of the pulse.
       - float charge // The integrated charge of the pulse
@@ -271,9 +271,9 @@ datatypes :
     Description: "LCIO tracker raw data"
     Author : "Whit Armstrong"
     Members:
-      - int cellID0  // The detector specific (geometrical) cell id.
-      - int cellID1  // The second detector specific (geometrical) cell id.
-      - int channelID  // channel  id.
+      - int64_t cellID0  // The detector specific (geometrical) cell id.
+      - int64_t cellID1  // The second detector specific (geometrical) cell id.
+      - int64_t channelID  // channel  id.
       - int time     //  time measurement associated with the adc values.
       - int adc      // measured ADC values
         #      - std::vector<short> adc // measured ADC values.
@@ -282,8 +282,8 @@ datatypes :
     Description: "LCIO tracker data"
     Author : "F.Gaede, B. Hegner"
     Members:
-      - int cellID0  // The detector specific (geometrical) cell id.
-      - int cellID1  // The second detector specific (geometrical) cell id.
+      - int64_t cellID0  // The detector specific (geometrical) cell id.
+      - int64_t cellID1  // The second detector specific (geometrical) cell id.
       - int time     //  time measurement associated with the adc values.
         #      - std::vector<short> charge // The actual FADC spectrum.
 
